@@ -16,30 +16,25 @@ class Home extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			fadeAnim: new Animated.Value(0)
+			fadeAnim: new Animated.Value(0),
+			loaded: false
 		}
-	}
-
-	componentDidMount () {
-		Animated.timing(
-			this.state.fadeAnim,
-			{toValue: 1}
-		).start();
 	}
 
 	_getStyle () {
 		return [
-			styles.container,
+			styles.image,
 			{
 				opacity: this.state.fadeAnim,
-				transform: [{
-					translateY: this.state.fadeAnim.interpolate({
-	       		inputRange: [0, 1],
-	       		outputRange: [150, 0]
-	     		}),
-				}]
 			}
 		]
+	}
+
+	_renderForm () {
+		Animated.timing(
+			this.state.fadeAnim,
+			{toValue: 1}
+		).start();
 	}
 
 	render () {
@@ -51,15 +46,20 @@ class Home extends Component {
 			var view = <Text style={styles.welcome}>Welcome to the Noel Transportation App. Stay on the Locator tab to send location.</Text>
 		} else {
 			var view = 
-				<Image resizeMode={'contain'} source={require('../imgs/backgroundTruck.jpeg')} style={styles.image}>
+				<Animated.Image
+					onLoad={this._renderForm.bind(this)}
+					resizeMode={'contain'}
+					source={require('../imgs/backgroundTruck.jpeg')}
+					style={this._getStyle()}
+				>
 					<Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} />
-				</Image>
+				</Animated.Image>
 		};
 		
 		return (
-			<Animated.View style={this._getStyle()}>
+			<View style={styles.container}>
 				{ view }
-			</Animated.View>
+			</View>
 		)
 	}
 }
