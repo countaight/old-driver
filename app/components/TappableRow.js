@@ -11,7 +11,7 @@ export default class TappableRow extends Component {
 		}
 		return (
 			<TouchableHighlight
-				underlayColor="#9cc59c"
+				underlayColor="#26845b"
 				onPress={this.props.onPress}
 				style={button}
 			>
