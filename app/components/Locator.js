@@ -13,24 +13,48 @@ import TappableRow from './TappableRow';
 
 class Locator extends Component {
 	watchID: ?number = null;
+	constructor (props) {
+		super(props);
+		this.state = {
+			ws: {}
+		}
+	}
 
 	componentDidMount() {
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
 				var initialLong = JSON.stringify(position.coords.longitude);
 				var initialLat = JSON.stringify(position.coords.latitude);
-				this.props.fetchTest(this.props.user.id, { initialLong, initialLat });
+				this._updateCoords(this.props.user.id, { initialLong, initialLat });
 			},
 			(error) => alert(error)
 		);
+
+		const ws = new WebSocket("ws://172.16.1.2:3000/mapsocket");
+		ws.onopen = (e) => {
+			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
+			ws.send(this.props.user.email + " has connected!");
+			this.setState({ ...this.state, ws })
+		}
+
+		ws.onmessage = (e) => {
+			ToastAndroid.show(e.data, ToastAndroid.SHORT);
+		}
 	}
 
 	componentWillUnmount() {
 		navigator.geolocation.clearWatch(this.watchID);
+		this.state.ws.close();
+		this.setState({ ...this.state, ws: {} })
 	}
 
 	_fetchCoords() {
 		this.props.fetchCoords(this.props.user.id);
+	}
+
+	_updateCoords(userId, coords) {
+		this.props.fetchTest(userId, coords);
+		this.state.ws.send(JSON.stringify({ id: userId, coordinates: coords }));
 	}
 
 	render() {
