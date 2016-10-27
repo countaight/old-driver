@@ -13,14 +13,13 @@ import TappableRow from './TappableRow';
 
 class Locator extends Component {
 	watchID: ?number = null;
+	ws: null;
+
 	constructor (props) {
 		super(props);
-		this.state = {
-			ws: {}
-		}
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
 				var initialLong = JSON.stringify(position.coords.longitude);
@@ -30,11 +29,11 @@ class Locator extends Component {
 			(error) => alert(error)
 		);
 
-		const ws = new WebSocket("ws://noeltrans.herokuapp.com/mapsocket");
+		const ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
 		ws.onopen = (e) => {
 			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
 			ws.send(this.props.user.email + " has connected!");
-			this.setState({ ...this.state, ws })
+			this.ws = ws;
 		}
 
 		ws.onmessage = (e) => {
@@ -44,8 +43,8 @@ class Locator extends Component {
 
 	componentWillUnmount() {
 		navigator.geolocation.clearWatch(this.watchID);
-		this.state.ws.close();
-		this.setState({ ...this.state, ws: {} })
+		this.ws.close();
+		this.ws = null;
 	}
 
 	_fetchCoords() {
@@ -54,7 +53,7 @@ class Locator extends Component {
 
 	_updateCoords(userId, coords) {
 		this.props.fetchTest(userId, coords);
-		this.state.ws.send(JSON.stringify({ id: userId, coordinates: coords }));
+		this.ws.send(JSON.stringify({ id: userId, coordinates: coords }));
 	}
 
 	render() {
