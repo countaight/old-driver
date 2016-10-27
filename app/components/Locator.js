@@ -29,7 +29,7 @@ class Locator extends Component {
 			(error) => alert(error)
 		);
 
-		const ws = new WebSocket("ws://noeltrans.herokuapp.com/mapsocket");
+		const ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
 		ws.onopen = (e) => {
 			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
 			ws.send(this.props.user.email + " has connected!");
