@@ -61,16 +61,8 @@ class Locator extends Component {
 		return (
 			<View style={styles.container}>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
-					<Text>{"\n"}{user.email}{"\n"}</Text>
-					<Text>{"\n"}Map Coordinates {"\n"}Longitude: {user.initialLong}{"\n"}</Text>
-					<Text>Latitude: {user.initialLat}</Text>
-					{"\n"}
+					<Text>Keep this tab open to continue sending your location.</Text>
 				</Text>
-				<TappableRow
-					text="Check In"
-					onPress={this._fetchCoords.bind(this)}
-					styles={styles}
-				/>
 			</View>
 		)
 	}
