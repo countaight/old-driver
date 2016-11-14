@@ -53,15 +53,16 @@ class Locator extends Component {
 
 	_updateCoords(userId, coords) {
 		this.props.fetchTest(userId, coords);
-		this.ws.send(JSON.stringify({ id: userId, coordinates: coords }));
 	}
 
 	render() {
 		const { user } = this.props;
+		console.log(user);
 		return (
 			<View style={styles.container}>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
-					<Text>Keep this tab open to continue sending your location.</Text>
+					<Text>Keep this tab open to continue sending your location.{"\n"}</Text>
+					<Text>Last updated: {user.updated_at}</Text>
 				</Text>
 			</View>
 		)
