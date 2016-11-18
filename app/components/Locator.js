@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Moment from 'moment';
 import { 
 	StatusBar, 
 	StyleSheet, 
@@ -52,6 +53,7 @@ class Locator extends Component {
 	}
 
 	_updateCoords(userId, coords) {
+		this.ws.send(Moment(Date.now()).format('H:mm'));
 		this.props.fetchTest(userId, coords);
 	}
 
@@ -62,7 +64,7 @@ class Locator extends Component {
 			<View style={styles.container}>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
 					<Text>Keep this tab open to continue sending your location.{"\n"}</Text>
-					<Text>Last updated: {user.updated_at}</Text>
+					<Text>Last updated: {Moment(user.updated_at).fromNow()}</Text>
 				</Text>
 			</View>
 		)

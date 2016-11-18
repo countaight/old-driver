@@ -28,8 +28,8 @@ export default function userReducer(state = initialState, action) {
 			return { ...state, fetching: true }
 		}
 		case "FETCH_COORDS_FULFILLED": {
-			const { initialLat, initialLong } = JSON.parse(action.payload)
-			const user = { ...state.user, initialLat, initialLong }
+			const { initialLat, initialLong, updated_at } = JSON.parse(action.payload)
+			const user = { ...state.user, initialLat, initialLong, updated_at }
 			return {
 				...state,
 				fetching: false,
