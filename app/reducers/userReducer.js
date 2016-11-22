@@ -6,8 +6,8 @@ const initialState = {
 	user: {
 		id: null,
 		email: "unknown",
-		initialLong: "unknown",
-		initialLat: "unknown",
+		initialLong: 0,
+		initialLat: 0,
 		updated_at: null
 	},
 	fetching: false,
@@ -28,7 +28,7 @@ export default function userReducer(state = initialState, action) {
 			return { ...state, fetching: true }
 		}
 		case "FETCH_COORDS_FULFILLED": {
-			const { initialLat, initialLong, updated_at } = JSON.parse(action.payload)
+			const { initialLat, initialLong, updated_at } = action.payload
 			const user = { ...state.user, initialLat, initialLong, updated_at }
 			return {
 				...state,

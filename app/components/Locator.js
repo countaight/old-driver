@@ -23,14 +23,14 @@ class Locator extends Component {
 	componentWillMount() {
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
-				var initialLong = JSON.stringify(position.coords.longitude);
-				var initialLat = JSON.stringify(position.coords.latitude);
+				var initialLong = position.coords.longitude;
+				var initialLat = position.coords.latitude;
 				this._updateCoords(this.props.user.id, { initialLong, initialLat });
 			},
 			(error) => alert(error)
 		);
 
-		const ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
+		const ws = new WebSocket("ws://172.16.1.2:3000/mapsocket");
 		ws.onopen = (e) => {
 			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
 			ws.send(this.props.user.email + " has connected!");
@@ -59,7 +59,6 @@ class Locator extends Component {
 
 	render() {
 		const { user } = this.props;
-		console.log(user);
 		return (
 			<View style={styles.container}>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>

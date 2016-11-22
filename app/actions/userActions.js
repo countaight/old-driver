@@ -6,8 +6,8 @@ export function fetchCoords(userId) {
 	return function(dispatch) {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				var initialLong = JSON.stringify(position.coords.longitude);
-				var initialLat = JSON.stringify(position.coords.latitude);
+				var initialLong = position.coords.longitude;
+				var initialLat = position.coords.latitude;
 				dispatch(fetchTest(userId, { initialLong, initialLat }));
 			},
 			(error) => dispatch({ type: "FETCH_COORDS_REJECTED", payload: error })
@@ -17,7 +17,7 @@ export function fetchCoords(userId) {
 
 export function fetchTest(userId, coords) {
 	return function(dispatch) {
-		fetch('https://noeltrans.herokuapp.com/testing.json', {
+		fetch('http://172.16.1.2:3000/testing.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
@@ -52,7 +52,7 @@ export function submitForm(fields) {
 		dispatch({
 			type: 'FETCH_USER'
 		});
-		fetch('https://noeltrans.herokuapp.com/login.json', {
+		fetch('http://172.16.1.2:3000/login.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
