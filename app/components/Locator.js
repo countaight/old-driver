@@ -20,11 +20,11 @@ class Locator extends Component {
 		super(props);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
-				const lng = position.coords.longitude;
-				const lat = position.coords.latitude;
+				let lng = position.coords.longitude;
+				let lat = position.coords.latitude;
 				this._updateCoords(this.props.user.id, { lng, lat });
 			},
 			(error) => alert(error)
@@ -53,7 +53,8 @@ class Locator extends Component {
 	}
 
 	_updateCoords(userId, coords) {
-		this.ws.send(Moment(Date.now()).format('H:mm'));
+		const message = { id: userId, coordinates: coords, updated_at: Moment().toISOString()}
+		this.ws.send(JSON.stringify(message));
 		this.props.fetchTest(userId, coords);
 	}
 
