@@ -6,9 +6,9 @@ export function fetchCoords(userId) {
 	return function(dispatch) {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				var initialLong = position.coords.longitude;
-				var initialLat = position.coords.latitude;
-				dispatch(fetchTest(userId, { initialLong, initialLat }));
+				var lng = position.coords.longitude;
+				var lat = position.coords.latitude;
+				dispatch(fetchTest(userId, { lng, lat }));
 			},
 			(error) => dispatch({ type: "FETCH_COORDS_REJECTED", payload: error })
 		);

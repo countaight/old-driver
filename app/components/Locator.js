@@ -23,9 +23,9 @@ class Locator extends Component {
 	componentWillMount() {
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
-				var initialLong = position.coords.longitude;
-				var initialLat = position.coords.latitude;
-				this._updateCoords(this.props.user.id, { initialLong, initialLat });
+				const lng = position.coords.longitude;
+				const lat = position.coords.latitude;
+				this._updateCoords(this.props.user.id, { lng, lat });
 			},
 			(error) => alert(error)
 		);
