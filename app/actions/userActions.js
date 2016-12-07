@@ -1,16 +1,26 @@
 import { ToastAndroid } from 'react-native';
 
-import { CHANGE_TEXT, SUBMIT_FORM } from '../constants/ActionTypes';
+import {
+	CHANGE_TEXT, 
+	SUBMIT_FORM, 
+	FETCH_USER, 
+	FETCH_USER_FULFILLED, 
+	FETCH_USER_REJECTED,
+	FETCH_COORDS,
+	FETCH_COORDS_FULFILLED,
+	FETCH_COORDS_REJECTED
+} from '../constants/ActionTypes';
 
 export function fetchCoords(userId) {
 	return function(dispatch) {
+		dispatch({ type: FETCH_COORDS });
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				var lng = position.coords.longitude;
-				var lat = position.coords.latitude;
+				const lng = position.coords.longitude;
+				const lat = position.coords.latitude;
 				dispatch(fetchTest(userId, { lng, lat }));
 			},
-			(error) => dispatch({ type: "FETCH_COORDS_REJECTED", payload: error })
+			(error) => dispatch({ type: FETCH_COORDS_REJECTED, payload: error })
 		);
 	}
 }
@@ -31,7 +41,7 @@ export function fetchTest(userId, coords) {
 		.then((response) => response.json())
 		.then((respJSON) => {
 			dispatch({ 
-				type: 'FETCH_COORDS_FULFILLED',
+				type: FETCH_COORDS_FULFILLED,
 				payload: respJSON.body
 			});
 		})
@@ -50,7 +60,7 @@ export function changeTxt(field, text) {
 export function submitForm(fields) {
 	return function(dispatch) {
 		dispatch({
-			type: 'FETCH_USER'
+			type: FETCH_USER
 		});
 		fetch('http://172.16.1.2:3000/login.json', {
 			method: 'post',
@@ -65,14 +75,14 @@ export function submitForm(fields) {
 		.then((response) => response.json())
 		.then((respJSON) => {
 			dispatch({
-				type: 'FETCH_USER_FULFILLED',
+				type: FETCH_USER_FULFILLED,
 				payload: respJSON.body
 			});
 			ToastAndroid.show('Success!', ToastAndroid.SHORT);
 		})
 		.catch((error) => {
 			dispatch({
-				type: 'FETCH_USER_REJECTED',
+				type: FETCH_USER_REJECTED,
 				payload: error
 			});
 			ToastAndroid.show('Email/Password combinations was incorrect. Try again.', ToastAndroid.SHORT)

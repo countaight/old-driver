@@ -1,5 +1,18 @@
-export const PUSH_ROUTE = 'PUSH_ROUTE'
-export const POP_ROUTE = 'POP_ROUTE'
-export const CHANGE_TAB = 'CHANGE_TAB'
+//NAVIGATION Actions
+export const PUSH_ROUTE  = 'PUSH_ROUTE'
+export const POP_ROUTE   = 'POP_ROUTE'
+export const CHANGE_TAB  = 'CHANGE_TAB'
+
+//FORM Actions
 export const CHANGE_TEXT = 'CHANGE_TEXT'
 export const SUBMIT_FORM = 'SUBMIT_FORM'
+
+//FETCH USER Actions
+export const FETCH_USER           = 'FETCH_USER'
+export const FETCH_USER_FULFILLED = 'FETCH_USER_FULFILLED'
+export const FETCH_USER_REJECTED  = 'FETCH_USER_REJECTED'
+
+//FETCH COORDINATES Actions
+export const FETCH_COORDS           = 'FETCH_COORDS'
+export const FETCH_COORDS_FULFILLED = 'FETCH_COORDS_FULFILLED'
+export const FETCH_COORDS_REJECTED  = 'FETCH_COORDS_REJECTED'

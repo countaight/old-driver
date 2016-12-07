@@ -53,8 +53,14 @@ class Locator extends Component {
 	}
 
 	_updateCoords(userId, coords) {
-		const message = { id: userId, coordinates: coords, updated_at: Moment().toISOString()}
+		const message = {
+			id: userId, 
+			coordinates: coords, 
+			updated_at: Moment().toISOString()
+		}
+
 		this.ws.send(JSON.stringify(message));
+
 		this.props.fetchTest(userId, coords);
 	}
 
@@ -63,8 +69,12 @@ class Locator extends Component {
 		return (
 			<View style={styles.container}>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
-					<Text>Keep this tab open to continue sending your location.{"\n"}</Text>
-					<Text>Last updated: {Moment(user.updated_at).fromNow()}</Text>
+					<Text>
+						Keep this tab open to continue sending your location.{"\n"}
+					</Text>
+					<Text>
+						Last updated: {Moment(user.updated_at).fromNow()}
+					</Text>
 				</Text>
 			</View>
 		)

@@ -1,4 +1,13 @@
-import { CHANGE_TEXT, SUBMIT_FORM } from '../constants/ActionTypes';
+import {
+	CHANGE_TEXT,
+	SUBMIT_FORM,
+	FETCH_USER,
+	FETCH_USER_FULFILLED,
+	FETCH_USER_REJECTED,
+	FETCH_COORDS,
+	FETCH_COORDS_FULFILLED,
+	FETCH_COORDS_REJECTED
+} from '../constants/ActionTypes';
 
 const initialState = {
 	email: "",
@@ -24,10 +33,10 @@ export default function userReducer(state = initialState, action) {
 				[field]: action.text,
 			}
 		}
-		case "FETCH_COORDS": {
+		case FETCH_COORDS: {
 			return { ...state, fetching: true }
 		}
-		case "FETCH_COORDS_FULFILLED": {
+		case FETCH_COORDS_FULFILLED: {
 			const { lat, lng, updated_at } = action.payload
 			const user = { ...state.user, lat, lng, updated_at }
 			return {
@@ -36,20 +45,20 @@ export default function userReducer(state = initialState, action) {
 				user,
 			}
 		}
-		case "FETCH_COORDS_REJECTED": {
+		case FETCH_COORDS_REJECTED: {
 			return {
 				...state,
 				fetching: false,
 				error: action.payload,
 			}
 		}
-		case "FETCH_USER": {
+		case FETCH_USER: {
 			return { ...state, fetching: true }
 		}
-		case "FETCH_USER_REJECTED": {
+		case FETCH_USER_REJECTED: {
 			return { ...state, fetching: false, error: action.payload }
 		}
-		case "FETCH_USER_FULFILLED": {
+		case FETCH_USER_FULFILLED: {
 			const { id, email, updated_at } = action.payload
 			const user = { ...state.user, id, email, updated_at }
 			return { 
