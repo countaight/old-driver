@@ -139,8 +139,6 @@ const styles = {
 		fontSize: 16,
 		width: 250,
 		height: 40,
-		borderColor: '#006838',
-		borderWidth: 2,
 	},
 	placeholder: {
 		paddingLeft: 5,
