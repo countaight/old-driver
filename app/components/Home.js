@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	welcome: {
+		textAlign: 'center',
 		fontSize: 16,
 		width: 300,
 		fontFamily: 'Montserrat-Regular'
