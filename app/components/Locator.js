@@ -20,17 +20,17 @@ class Locator extends Component {
 		super(props);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
-				var initialLong = JSON.stringify(position.coords.longitude);
-				var initialLat = JSON.stringify(position.coords.latitude);
-				this._updateCoords(this.props.user.id, { initialLong, initialLat });
+				let lng = position.coords.longitude;
+				let lat = position.coords.latitude;
+				this._updateCoords(this.props.user.id, { lng, lat });
 			},
 			(error) => alert(error)
 		);
 
-		const ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
+		const ws = new WebSocket("ws://172.16.1.2:3000/mapsocket");
 		ws.onopen = (e) => {
 			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
 			ws.send(this.props.user.email + " has connected!");
@@ -53,18 +53,28 @@ class Locator extends Component {
 	}
 
 	_updateCoords(userId, coords) {
-		this.ws.send(Moment(Date.now()).format('H:mm'));
+		const message = {
+			id: userId, 
+			coordinates: coords, 
+			updated_at: Moment().toISOString()
+		}
+
+		this.ws.send(JSON.stringify(message));
+
 		this.props.fetchTest(userId, coords);
 	}
 
 	render() {
 		const { user } = this.props;
-		console.log(user);
 		return (
 			<View style={styles.container}>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
-					<Text>Keep this tab open to continue sending your location.{"\n"}</Text>
-					<Text>Last updated: {Moment(user.updated_at).fromNow()}</Text>
+					<Text>
+						Keep this tab open to continue sending your location.{"\n"}
+					</Text>
+					<Text>
+						Last updated: {Moment(user.updated_at).fromNow()}
+					</Text>
 				</Text>
 			</View>
 		)
