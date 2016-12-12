@@ -9,6 +9,7 @@ import {
 	TouchableHighlight, 
 	View 
 } from 'react-native';
+import MapView from 'react-native-maps';
 
 import TappableRow from './TappableRow';
 
@@ -66,8 +67,26 @@ class Locator extends Component {
 
 	render() {
 		const { user } = this.props;
+		console.log(user);
 		return (
 			<View style={styles.container}>
+				<MapView
+					style={styles.map}
+			    initialRegion={{
+			      latitude: 37.78825,
+			      longitude: -122.4324,
+			      latitudeDelta: 0.1022,
+			      longitudeDelta: 0.0521,
+			    }}
+			    region={{
+			    	latitude: user.lat,
+			    	longitude: user.lng,
+			    	latitudeDelta: 0.1022,
+			      longitudeDelta: 0.0521,
+			    }}
+				>
+					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${user.lng}`} pinColor={"darkgreen"} coordinate={{latitude: user.lat, longitude: user.lng}} />
+				</MapView>
 				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
 					<Text>
 						Keep this tab open to continue sending your location.{"\n"}
@@ -107,6 +126,9 @@ const styles = StyleSheet.create({
 		fontFamily: "ReemKufi-Regular",
 		color: "white",
 	},
+	map: {
+	   ...StyleSheet.absoluteFillObject,
+	 },
 })
 
 export default Locator;
