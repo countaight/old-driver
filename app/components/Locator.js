@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
-import { 
+import {
+	Platform,
 	StatusBar, 
 	StyleSheet, 
 	Text, 
@@ -31,15 +32,20 @@ class Locator extends Component {
 			(error) => alert(error)
 		);
 
-		const ws = new WebSocket("ws://172.16.1.2:3000/mapsocket");
+		const ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
 		ws.onopen = (e) => {
-			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
+			if (Platform.OS === 'android') {
+				ToastAndroid.show('Connected!', ToastAndroid.SHORT);
+			};
+
 			ws.send(this.props.user.email + " has connected!");
 			this.ws = ws;
 		}
 
 		ws.onmessage = (e) => {
-			ToastAndroid.show(e.data, ToastAndroid.SHORT);
+			if (Platform.OS === 'android') {
+				ToastAndroid.show(e.data, ToastAndroid.SHORT);
+			}
 		}
 	}
 
@@ -87,7 +93,7 @@ class Locator extends Component {
 				>
 					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${user.lng}`} pinColor={"darkgreen"} coordinate={{latitude: user.lat, longitude: user.lng}} />
 				</MapView>
-				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
+				<Text style={{opacity: 0.5, fontFamily: 'ReemKufi-Regular', width: 210}}>
 					<Text>
 						Keep this tab open to continue sending your location.{"\n"}
 					</Text>

@@ -1,4 +1,4 @@
-import { ToastAndroid } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 
 import {
 	CHANGE_TEXT, 
@@ -27,7 +27,7 @@ export function fetchCoords(userId) {
 
 export function fetchTest(userId, coords) {
 	return function(dispatch) {
-		fetch('http://172.16.1.2:3000/testing.json', {
+		fetch('http://172.16.1.15:3000/testing.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
@@ -62,7 +62,7 @@ export function submitForm(fields) {
 		dispatch({
 			type: FETCH_USER
 		});
-		fetch('http://172.16.1.2:3000/login.json', {
+		fetch('http://172.16.1.15:3000/login.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
@@ -78,14 +78,18 @@ export function submitForm(fields) {
 				type: FETCH_USER_FULFILLED,
 				payload: respJSON.body
 			});
-			ToastAndroid.show('Success!', ToastAndroid.SHORT);
+			if (Platform.OS === 'android') {
+				ToastAndroid.show('Success!', ToastAndroid.SHORT);
+			}
 		})
 		.catch((error) => {
 			dispatch({
 				type: FETCH_USER_REJECTED,
 				payload: error
 			});
-			ToastAndroid.show('Email/Password combinations was incorrect. Try again.', ToastAndroid.SHORT)
+			if (Platform.OS === 'android') {
+				ToastAndroid.show('Email/Password combinations was incorrect. Try again.', ToastAndroid.SHORT);
+			}
 		})
 	}
 }
