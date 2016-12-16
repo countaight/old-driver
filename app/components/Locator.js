@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
-import { 
+import {
+	Platform,
 	StatusBar, 
 	StyleSheet, 
 	Text, 
@@ -9,6 +10,7 @@ import {
 	TouchableHighlight, 
 	View 
 } from 'react-native';
+import MapView from 'react-native-maps';
 
 import TappableRow from './TappableRow';
 
@@ -30,15 +32,20 @@ class Locator extends Component {
 			(error) => alert(error)
 		);
 
-		const ws = new WebSocket("ws://172.16.1.2:3000/mapsocket");
+		const ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
 		ws.onopen = (e) => {
-			ToastAndroid.show('Connected!', ToastAndroid.SHORT);
+			if (Platform.OS === 'android') {
+				ToastAndroid.show('Connected!', ToastAndroid.SHORT);
+			};
+
 			ws.send(this.props.user.email + " has connected!");
 			this.ws = ws;
 		}
 
 		ws.onmessage = (e) => {
-			ToastAndroid.show(e.data, ToastAndroid.SHORT);
+			if (Platform.OS === 'android') {
+				ToastAndroid.show(e.data, ToastAndroid.SHORT);
+			}
 		}
 	}
 
@@ -66,9 +73,27 @@ class Locator extends Component {
 
 	render() {
 		const { user } = this.props;
+		console.log(user);
 		return (
 			<View style={styles.container}>
-				<Text style={{fontFamily: 'ReemKufi-Regular', width: 210}}>
+				<MapView
+					style={styles.map}
+			    initialRegion={{
+			      latitude: 37.78825,
+			      longitude: -122.4324,
+			      latitudeDelta: 0.1022,
+			      longitudeDelta: 0.0521,
+			    }}
+			    region={{
+			    	latitude: user.lat,
+			    	longitude: user.lng,
+			    	latitudeDelta: 0.1022,
+			      longitudeDelta: 0.0521,
+			    }}
+				>
+					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${user.lng}`} pinColor={"darkgreen"} coordinate={{latitude: user.lat, longitude: user.lng}} />
+				</MapView>
+				<Text style={{opacity: 0.5, fontFamily: 'ReemKufi-Regular', width: 210}}>
 					<Text>
 						Keep this tab open to continue sending your location.{"\n"}
 					</Text>
@@ -107,6 +132,9 @@ const styles = StyleSheet.create({
 		fontFamily: "ReemKufi-Regular",
 		color: "white",
 	},
+	map: {
+	   ...StyleSheet.absoluteFillObject,
+	 },
 })
 
 export default Locator;
