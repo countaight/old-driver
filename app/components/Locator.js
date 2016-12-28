@@ -20,31 +20,41 @@ class Locator extends Component {
 
 	constructor (props) {
 		super(props);
+		this.state = {
+			region: {
+				latitude: 0,
+				longitude: 0,
+				latitudeDelta: 0.1022,
+				longitudeDelta: 0.0521,
+			},
+			messageText: 'Nothing Yet',
+		};
 	}
 
 	componentDidMount() {
+		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
 				let lng = position.coords.longitude;
 				let lat = position.coords.latitude;
 				this._updateCoords(this.props.user.id, { lng, lat });
 			},
-			(error) => alert(error)
+			(error) => console.log(error)
 		);
 
-		const ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
-		ws.onopen = (e) => {
+		this.ws.onopen = (e) => {
 			if (Platform.OS === 'android') {
 				ToastAndroid.show('Connected!', ToastAndroid.SHORT);
 			};
 
-			ws.send(this.props.user.email + " has connected!");
-			this.ws = ws;
+			this.ws.send(this.props.user.email + " has connected!");
 		}
 
-		ws.onmessage = (e) => {
+		this.ws.onmessage = (e) => {
 			if (Platform.OS === 'android') {
 				ToastAndroid.show(e.data, ToastAndroid.SHORT);
+			} else {
+				this.setState({...this.state, messageText: e.data});
 			}
 		}
 	}
@@ -65,31 +75,27 @@ class Locator extends Component {
 			coordinates: coords, 
 			updated_at: Moment().toISOString()
 		}
-
-		this.ws.send(JSON.stringify(message));
+		if (this.ws && this.ws.readyState === 1) {
+			this.ws.send(JSON.stringify(message));
+		}
 
 		this.props.fetchTest(userId, coords);
 	}
 
 	render() {
 		const { user } = this.props;
-		console.log(user);
 		return (
 			<View style={styles.container}>
 				<MapView
 					style={styles.map}
 			    initialRegion={{
-			      latitude: 37.78825,
-			      longitude: -122.4324,
+			      latitude: user.lat,
+			      longitude: user.lng,
 			      latitudeDelta: 0.1022,
 			      longitudeDelta: 0.0521,
 			    }}
-			    region={{
-			    	latitude: user.lat,
-			    	longitude: user.lng,
-			    	latitudeDelta: 0.1022,
-			      longitudeDelta: 0.0521,
-			    }}
+			    region={this.state.region}
+			    onRegionChange={(coordinates) => this.setState({...this.state, region: coordinates})}
 				>
 					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${user.lng}`} pinColor={"darkgreen"} coordinate={{latitude: user.lat, longitude: user.lng}} />
 				</MapView>
@@ -101,6 +107,10 @@ class Locator extends Component {
 						Last updated: {Moment(user.updated_at).fromNow()}
 					</Text>
 				</Text>
+				<Text onPress={() => this.setState({...this.state, region: {latitude: user.lat, longitude: user.lng, latitudeDelta: 0.1022, longitudeDelta: 0.0521}})}>
+					Find Me!
+				</Text>
+				{Platform.OS === 'ios' ? <Text>{this.state.messageText}</Text> : ''}
 			</View>
 		)
 	}
