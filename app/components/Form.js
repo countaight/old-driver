@@ -73,6 +73,9 @@ class Form extends Component {
 					<View style={{height: 60}}>
 						<Animated.Text style={this._getStyle('email')}>Email</Animated.Text>
 						<TextInput
+							autoCapitalize={'none'}
+							autoCorrect={false}
+							autoFocus={true}
 							keyboardType={"email-address"}
 							onBlur={this._changeField.bind(this, "email")}
 							onChangeText={this._onChange.bind(this, "email")}
