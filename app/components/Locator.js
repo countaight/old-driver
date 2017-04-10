@@ -110,7 +110,7 @@ class Locator extends Component {
 				<Text onPress={() => this.setState({...this.state, region: {latitude: user.lat, longitude: user.lng, latitudeDelta: 0.1022, longitudeDelta: 0.0521}})}>
 					Find Me!
 				</Text>
-				{Platform.OS === 'ios' ? <Text>{this.state.messageText}</Text> : ''}
+				{Platform.OS === 'ios' ? <Text>{this.state.messageText}</Text> : null}
 			</View>
 		)
 	}
