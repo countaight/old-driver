@@ -16,4 +16,3 @@ export default connect(
 		submitForm: (fields) => submitForm(fields),
 	}
 )(Home)
-

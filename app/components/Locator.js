@@ -32,29 +32,31 @@ class Locator extends Component {
 	}
 
 	componentDidMount() {
-		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
-		this.watchID = navigator.geolocation.watchPosition(
-			(position) => {
-				let lng = position.coords.longitude;
-				let lat = position.coords.latitude;
-				this._updateCoords(this.props.user.id, { lng, lat });
-			},
-			(error) => console.log(error)
-		);
+		if (this.props.user.id) {
+			this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
+			this.watchID = navigator.geolocation.watchPosition(
+				(position) => {
+					let lng = position.coords.longitude;
+					let lat = position.coords.latitude;
+					this._updateCoords(this.props.user.id, { lng, lat });
+				},
+				(error) => console.log(error)
+			);
 
-		this.ws.onopen = (e) => {
-			if (Platform.OS === 'android') {
-				ToastAndroid.show('Connected!', ToastAndroid.SHORT);
-			};
+			this.ws.onopen = (e) => {
+				if (Platform.OS === 'android') {
+					ToastAndroid.show('Connected!', ToastAndroid.SHORT);
+				};
 
-			this.ws.send(this.props.user.email + " has connected!");
-		}
+				this.ws.send(this.props.user.email + " has connected!");
+			}
 
-		this.ws.onmessage = (e) => {
-			if (Platform.OS === 'android') {
-				ToastAndroid.show(e.data, ToastAndroid.SHORT);
-			} else {
-				this.setState({...this.state, messageText: e.data});
+			this.ws.onmessage = (e) => {
+				if (Platform.OS === 'android') {
+					ToastAndroid.show(e.data, ToastAndroid.SHORT);
+				} else {
+					this.setState({...this.state, messageText: e.data});
+				}
 			}
 		}
 	}
