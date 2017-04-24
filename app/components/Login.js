@@ -12,7 +12,7 @@ import {
 import Form from './Form';
 import TappableRow from './TappableRow';
 
-export default class Login extends Component {
+class Login extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -40,6 +40,7 @@ export default class Login extends Component {
 	}
 
 	render() {
+		const { fetching } = this.props.user
 		return (
 			<View style={styles.container}>
 				<Animated.Image
@@ -48,7 +49,7 @@ export default class Login extends Component {
 					source={require('../imgs/backgroundTruck.jpeg')}
 					style={this._getStyle()}
 				>
-					<Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} />
+					{ fetching ? <ActivityIndicator /> : <Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} /> }
 				</Animated.Image>
 			</View>
 		)
@@ -63,7 +64,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	image: {
-		height: 616,
+		height: '100%',
 		justifyContent: 'center',
 	},
 })
+
+export default Login;
