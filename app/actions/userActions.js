@@ -78,6 +78,11 @@ export function submitForm(fields) {
 				type: FETCH_USER_FULFILLED,
 				payload: respJSON.body
 			});
+			dispatch({
+				type: 'Navigation/NAVIGATE',
+				routeName: 'LoggedIn'
+			});
+			
 			if (Platform.OS === 'android') {
 				ToastAndroid.show('Success!', ToastAndroid.SHORT);
 			}
