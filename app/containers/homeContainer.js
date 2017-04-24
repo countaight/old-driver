@@ -10,9 +10,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(
-	mapStateToProps,
-	{
-		onChangeTxt: (field, text) => changeTxt(field, text),
-		submitForm: (fields) => submitForm(fields),
-	}
+	mapStateToProps
 )(Home)

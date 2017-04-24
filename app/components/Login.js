@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import Form from './Form';
-import TappableRow from './TappableRow';
 
 class Login extends Component {
 	constructor (props) {

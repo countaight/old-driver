@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 
-import TappableRow from './TappableRow';
-
 class Locator extends Component {
 	watchID: ?number = null;
 	ws: null;
