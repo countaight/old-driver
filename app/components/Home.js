@@ -4,8 +4,16 @@ import {
 	Text,
 	View,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 class Home extends Component {
+	static navigationOptions = {
+		tabBarLabel: 'Home',
+		tabBarIcon: ({ tintColor }) => (
+			<Icon name='home' color={tintColor} />
+		),
+	}
+
 	render () {
 		return (
 			<View style={styles.container}>

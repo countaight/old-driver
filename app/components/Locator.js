@@ -11,8 +11,16 @@ import {
 	View 
 } from 'react-native';
 import MapView from 'react-native-maps';
+import { Icon } from 'react-native-elements';
 
 class Locator extends Component {
+	static navigationOptions = {
+		tabBarLabel: 'Locator',
+		tabBarIcon: ({ tintColor }) => (
+			<Icon name='room' color={tintColor} />
+		),
+	}
+
 	watchID: ?number = null;
 	ws: null;
 

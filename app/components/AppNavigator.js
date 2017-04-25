@@ -1,4 +1,4 @@
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator, TabView } from 'react-navigation';
 
 import myHome from '../containers/homeContainer';
 import myLocator from '../containers/locatorContainer';
@@ -15,8 +15,15 @@ const AppNavigator = StackNavigator({
 				screen: myLocator
 			},
 		}, {
+			tabBarComponent: TabView.TabBarBottom,
+			tabBarPosition: 'bottom',
 			lazyLoad: true,
 			animationEnabled: true,
+			tabBarOptions: {
+				showLabel: false,
+				activeBackgroundColor: '#006838',
+				activeTintColor: 'white',
+			}
 		})
 	}
 }, {
