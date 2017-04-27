@@ -11,10 +11,16 @@ import {
 	View 
 } from 'react-native';
 import MapView from 'react-native-maps';
-
-import TappableRow from './TappableRow';
+import { Icon } from 'react-native-elements';
 
 class Locator extends Component {
+	static navigationOptions = {
+		tabBarLabel: 'Locator',
+		tabBarIcon: ({ tintColor }) => (
+			<Icon name='room' color={tintColor} />
+		),
+	}
+
 	watchID: ?number = null;
 	ws: null;
 
@@ -113,13 +119,6 @@ class Locator extends Component {
 				{Platform.OS === 'ios' ? <Text>{this.state.messageText}</Text> : null}
 			</View>
 		)
-	}
-
-	_goBack() {
-		if (this.props.navigationState.index === 0) {
-			return false
-		}
-		this.props._goBack()
 	}
 }
 

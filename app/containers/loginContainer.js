@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import Home from '../components/Home';
+import Login from '../components/Login';
 import { changeTxt, submitForm } from '../actions/userActions';
 
 function mapStateToProps(state) {
@@ -10,5 +10,9 @@ function mapStateToProps(state) {
 }
 
 export default connect(
-	mapStateToProps
-)(Home)
+	mapStateToProps,
+	{
+		onChangeTxt: (field, text) => changeTxt(field, text),
+		submitForm: (fields) => submitForm(fields),
+	}
+)(Login)
