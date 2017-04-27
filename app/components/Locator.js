@@ -120,13 +120,6 @@ class Locator extends Component {
 			</View>
 		)
 	}
-
-	_goBack() {
-		if (this.props.navigationState.index === 0) {
-			return false
-		}
-		this.props._goBack()
-	}
 }
 
 const styles = StyleSheet.create({

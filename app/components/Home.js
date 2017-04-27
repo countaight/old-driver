@@ -9,9 +9,11 @@ import { Icon } from 'react-native-elements';
 class Home extends Component {
 	static navigationOptions = {
 		tabBarLabel: 'Home',
-		tabBarIcon: ({ tintColor }) => (
-			<Icon name='home' color={tintColor} />
-		),
+		tabBarIcon: ({ tintColor }) => {
+			return (
+				<Icon name='home' color={tintColor} />
+			)
+		},
 	}
 
 	render () {

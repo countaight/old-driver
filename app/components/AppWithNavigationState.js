@@ -6,7 +6,7 @@ import AppNavigator from './AppNavigator';
 export default class AppWithNavigationState extends Component {
 	render() {
 		return(
-			<AppNavigator navigation={addNavigationHelpers({
+			<AppNavigator screenProps={this.props.nav} navigation={addNavigationHelpers({
 				dispatch: this.props.dispatch,
 				state: this.props.nav
 			})} />
