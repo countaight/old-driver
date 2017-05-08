@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "moment": "^2.16.0",
+    "pubnub": "^4.8.0",
     "react": "^16.0.0-alpha.6",
     "react-native": "^0.43.3",
     "react-native-elements": "^0.11.2",
