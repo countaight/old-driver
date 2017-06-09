@@ -48,7 +48,7 @@ class Login extends Component {
 					source={require('../imgs/backgroundTruck.jpeg')}
 					style={this._getStyle()}
 				>
-					{ fetching ? <ActivityIndicator /> : <Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} /> }
+					{ fetching ? <ActivityIndicator size="large" color="#006838"/> : <Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} /> }
 				</Animated.Image>
 			</View>
 		)

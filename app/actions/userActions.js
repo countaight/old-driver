@@ -27,7 +27,7 @@ export function fetchCoords(userId) {
 
 export function fetchTest(userId, coords) {
 	return function(dispatch) {
-		fetch('http://172.16.1.15:3000/testing.json', {
+		fetch('http://127.0.0.1:3000/testing.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
@@ -62,7 +62,7 @@ export function submitForm(fields) {
 		dispatch({
 			type: FETCH_USER
 		});
-		fetch('http://172.16.1.15:3000/login.json', {
+		fetch('http://127.0.0.1:3000/login.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',

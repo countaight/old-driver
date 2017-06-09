@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "Draper": "^1.1.0",
     "moment": "^2.16.0",
     "pubnub": "^4.8.0",
     "react": "^16.0.0-alpha.6",
@@ -23,5 +24,9 @@
     "assets": [
       "./fonts"
     ]
+  },
+  "devDependencies": {
+    "immutable": "^3.8.1",
+    "react-native-spinkit": "^1.0.2"
   }
 }

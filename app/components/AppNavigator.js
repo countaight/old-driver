@@ -3,7 +3,7 @@ import { StackNavigator, TabNavigator, TabView } from 'react-navigation';
 import myHome from '../containers/homeContainer';
 import myLocator from '../containers/locatorContainer';
 import LoginForm from '../containers/loginContainer';
-import ChatScreen from '../components/ChatScreen';
+import ChatContainer from '../containers/chatContainer';
 
 const AppNavigator = StackNavigator({
 	Login: { screen: LoginForm },
@@ -16,7 +16,7 @@ const AppNavigator = StackNavigator({
 				screen: myLocator
 			},
 			Chat: {
-				screen: ChatScreen
+				screen: ChatContainer
 			}
 		}, {
 			tabBarComponent: TabView.TabBarBottom,

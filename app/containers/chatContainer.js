@@ -1,10 +1,27 @@
+import React, {Component, PropTypes} from 'react';
+import {
+  ActivityIndicator,
+  Modal,
+  Text,
+  TouchableHighlight,
+  View,
+  Linking
+} from 'react-native';
+import { Icon } from 'react-native-elements';
+
 import { connect } from 'react-redux';
 
+import { connectionActions } from '../actions';
+import { ConnectionState, config } from '../constants';
+import { Conversation } from '../components/ChatScreen';
+
+import styles from '../styles';
+
 const mapStateToProps =
-	state => ({
-		connectionState: state.connection.get('state'),
-		failureTrace: state.connection.get('error'),
-	});
+  state => ({
+    connectionState: state.connection.get('state'),
+    failureTrace: state.connection.get('error'),
+  });
 
 const mapDispatchToProps =
 	dispatch => ({
@@ -15,6 +32,15 @@ const mapDispatchToProps =
 	})
 
 class ChatContainer extends Component {
+	static navigationOptions = {
+		tabBarLabel: 'Chat',
+		tabBarIcon: ({ tintColor }) => {
+			return (
+				<Icon name='chat' color={tintColor} />
+			)
+		},
+	}
+
 	componentDidMount () {
 		this.props.connect();
 	}
@@ -34,15 +60,15 @@ class ChatContainer extends Component {
 				);
 			case ConnectionState.Connected:
 				return <Conversation />;
-			case Connection.Failed:
+			case ConnectionState.Failed:
 				return (
-					<View>
-						<Text>Failed to connect, reconnecting in 1s</Text>
-						<View>
-							<Text>{failureTrace}</Text>
-						</View>
-					</View>
-				)
+          <View style={styles.m3}>
+            <Text>Failed to connect, reconnecting in 1s</Text>
+            <View style={styles.p1}>
+              <Text style={styles.stackTrace}>{failureTrace}</Text>
+            </View>
+          </View>
+        );
 		}
 	}
 };
