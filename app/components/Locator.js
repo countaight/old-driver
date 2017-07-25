@@ -85,35 +85,35 @@ class Locator extends Component {
 			this.ws.send(JSON.stringify(message));
 		}
 
-		this.props.fetchTest(userId, coords);
+		this.props.postCoords(userId, coords);
 	}
 
 	render() {
-		const { user } = this.props;
+		const { user, location } = this.props;
 		return (
 			<View style={styles.container}>
 				<MapView
 					style={styles.map}
 			    initialRegion={{
-			      latitude: user.lat,
-			      longitude: user.lng,
+			      latitude: location.lat,
+			      longitude: location.lng,
 			      latitudeDelta: 0.1022,
 			      longitudeDelta: 0.0521,
 			    }}
 			    region={this.state.region}
 			    onRegionChange={(coordinates) => this.setState({...this.state, region: coordinates})}
 				>
-					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${user.lng}`} pinColor={"darkgreen"} coordinate={{latitude: user.lat, longitude: user.lng}} />
+					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
 				</MapView>
 				<Text style={{opacity: 0.5, fontFamily: 'ReemKufi-Regular', width: 210}}>
 					<Text>
 						Keep this tab open to continue sending your location.{"\n"}
 					</Text>
 					<Text>
-						Last updated: {Moment(user.updated_at).fromNow()}
+						Last updated: {Moment(location.updated_at).fromNow()}
 					</Text>
 				</Text>
-				<Text onPress={() => this.setState({...this.state, region: {latitude: user.lat, longitude: user.lng, latitudeDelta: 0.1022, longitudeDelta: 0.0521}})}>
+				<Text onPress={() => this.setState({...this.state, region: {latitude: location.lat, longitude: location.lng, latitudeDelta: 0.1022, longitudeDelta: 0.0521}})}>
 					Find Me!
 				</Text>
 				{Platform.OS === 'ios' ? <Text>{this.state.messageText}</Text> : null}

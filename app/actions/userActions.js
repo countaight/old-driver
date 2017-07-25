@@ -1,53 +1,12 @@
 import { Platform, ToastAndroid } from 'react-native';
 
 import {
-	CHANGE_TEXT, 
-	SUBMIT_FORM, 
-	FETCH_USER, 
-	FETCH_USER_FULFILLED, 
-	FETCH_USER_REJECTED,
-	FETCH_COORDS,
-	FETCH_COORDS_FULFILLED,
-	FETCH_COORDS_REJECTED
+	CHANGE_TEXT,
+	SUBMIT_FORM,
+	FETCH_USER,
+	FETCH_USER_FULFILLED,
+	FETCH_USER_REJECTED
 } from '../constants/ActionTypes';
-
-export function fetchCoords(userId) {
-	return function(dispatch) {
-		dispatch({ type: FETCH_COORDS });
-		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				const lng = position.coords.longitude;
-				const lat = position.coords.latitude;
-				dispatch(fetchTest(userId, { lng, lat }));
-			},
-			(error) => dispatch({ type: FETCH_COORDS_REJECTED, payload: error })
-		);
-	}
-}
-
-export function fetchTest(userId, coords) {
-	return function(dispatch) {
-		fetch('http://127.0.0.1:3000/testing.json', {
-			method: 'post',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				userId: userId,
-				coordinates: coords
-			})
-		})
-		.then((response) => response.json())
-		.then((respJSON) => {
-			dispatch({ 
-				type: FETCH_COORDS_FULFILLED,
-				payload: respJSON.body
-			});
-		})
-		.catch((error) => console.error(error))
-	}
-}
 
 export function changeTxt(field, text) {
 	return {
@@ -82,7 +41,7 @@ export function submitForm(fields) {
 				type: 'Navigation/NAVIGATE',
 				routeName: 'LoggedIn'
 			});
-			
+
 			if (Platform.OS === 'android') {
 				ToastAndroid.show('Success!', ToastAndroid.SHORT);
 			}
