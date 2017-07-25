@@ -9,7 +9,7 @@ const presenceSubscriptions = new Set();
 
 const messageSubscriptions = new Set();
 
-const identifier = () => Math.random().toString(10).slice(12);
+const identifier = 'oscarTesting';
 
 let connection;
 
@@ -19,7 +19,7 @@ export const connect = () => {
 	}
 
 	connection = new Promise((resolve, reject) => {
-		const uuid = identifier();
+		const uuid = identifier;
 
 		const options = Object.assign({}, config.client, {uuid}, {authKey:'client123'});
 
@@ -130,7 +130,7 @@ export const participants = (channel) =>
     .catch(reject);
   });
 
-export const history = (channel, startTime) => 
+export const history = (channel, startTime) =>
   new Promise((resolve, reject) => {
     connect().then(({ pubnub }) => {
       pubnub.history({
@@ -142,7 +142,6 @@ export const history = (channel, startTime) =>
           reject(status.category);
         }
         else {
-        	console.log(response);
           resolve(response);
         }
       });
@@ -151,11 +150,12 @@ export const history = (channel, startTime) =>
   });
 
 export const publishTypingState = (channel, userId, isTyping) =>
-  connect().then(({ pubnub }) =>
+  connect().then(({ pubnub }) => {
     pubnub.setState({
       channels: [channel],
       state: {userId, isTyping},
-    }));
+    })
+  });
 
 export const publishMessage = (channel, message) =>
   new Promise((resolve, reject) => {

@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import Moment from 'moment';
 import {
 	Platform,
-	StatusBar, 
-	StyleSheet, 
-	Text, 
-	TextInput, 
-	ToastAndroid, 
-	TouchableHighlight, 
-	View 
+	StatusBar,
+	StyleSheet,
+	Text,
+	TextInput,
+	ToastAndroid,
+	TouchableHighlight,
+	View
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Icon } from 'react-native-elements';
@@ -77,8 +77,8 @@ class Locator extends Component {
 
 	_updateCoords(userId, coords) {
 		const message = {
-			id: userId, 
-			coordinates: coords, 
+			id: userId,
+			coordinates: coords,
 			updated_at: Moment().toISOString()
 		}
 		if (this.ws && this.ws.readyState === 1) {

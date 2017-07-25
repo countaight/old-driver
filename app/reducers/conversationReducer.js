@@ -28,7 +28,7 @@ export const initialState = fromJS({
     user: null, // only required for 'direct' channel
   },
 
-  lastMessageTimestamp: 1496947805781,
+  lastMessageTimestamp: 0,
 });
 
 export const conversationReducer = (state = initialState, {type, payload}) => {
