@@ -8,7 +8,7 @@ import {
   Linking
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-
+import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import { connectionActions } from '../actions';
@@ -17,11 +17,22 @@ import { Conversation } from '../components/ChatScreen';
 
 import styles from '../styles';
 
-const mapStateToProps =
-  state => ({
-    connectionState: state.connection.get('state'),
-    failureTrace: state.connection.get('error'),
-  });
+const getConnection = state => {
+	return {
+		connectionState: state.connection.get('state'),
+		failureTrace: state.connection.get('error')
+	};
+};
+
+const makeGetConnectionState = () => createSelector(
+	getConnection,
+	connection => connection
+	)
+
+const makeMapStateToProps = () => {
+	const getConnectionState = makeGetConnectionState();
+	return (state, props) => getConnectionState(state, props);
+}
 
 const mapDispatchToProps =
 	dispatch => ({
@@ -73,4 +84,4 @@ class ChatContainer extends Component {
 	}
 };
 
-export default Container = connect(mapStateToProps, mapDispatchToProps)(ChatContainer);
+export default Container = connect(makeMapStateToProps, mapDispatchToProps)(ChatContainer);

@@ -5,6 +5,7 @@ import {
 	View,
 	Dimensions
 } from 'react-native';
+import { createSelector } from 'reselect';
 
 import {
   history,
@@ -33,6 +34,7 @@ export default class ChatScreen extends Component {
 	}
 
 	render() {
+    console.log(this.state);
 	  const {
 	    history,
 	    typingUsers,
@@ -51,6 +53,7 @@ export default class ChatScreen extends Component {
 	  const containerStyle = Object.assign({}, absStretch, {
 	    backgroundColor: 'white',
 	  });
+
 	  return (
 	    <View style={[styles.flx1, styles.flxCol, styles.selfStretch]}>
 	      <View style={containerStyle}>
@@ -69,18 +72,6 @@ export default class ChatScreen extends Component {
     this.fetchHistory();
   }
 
-  componentDidUpdate(prevProps) {
-    const {clearHistory, selectedChannel} = this.props;
-
-    if (selectedChannel.name !== prevProps.selectedChannel.name) {
-      Promise.resolve(clearHistory())
-        .then(() => {
-          this.subscribeToChannel();
-          this.fetchHistory();
-        })
-    }
-  }
-
   componentWillUnmount() {
     if (this.subscription) {
       this.state.subscription.unsubscribe();
@@ -90,10 +81,6 @@ export default class ChatScreen extends Component {
 
   subscribeToChannel() {
     const channel = this.props.selectedChannel.name;
-
-    if (this.state.subscription) {
-      this.state.subscription.unsubscribe();
-    }
 
     this.setState({
       subscription: subscribe(
@@ -162,16 +149,27 @@ export default class ChatScreen extends Component {
   }
 }
 
-const mapStateToProps = state =>
-  Object.assign({},
+const getConversation = state => {
+  return Object.assign({},
     state.conversation.toJS(),
     {
       typingUsers: state.conversation.get('typingUsers').toArray(),
     }
-  );
+  )
+};
+
+const makeGetConversationState = () => createSelector(
+  getConversation,
+  (conversation) => conversation
+)
+
+const makeMapStateToProps = () => {
+  const getConversationState = makeGetConversationState()
+  return (state) => getConversationState(state);
+}
 
 export const Conversation = connect(
-  mapStateToProps,
+  makeMapStateToProps,
   Object.assign({}, conversationActions, {
     disconnect: connectionActions.disconnect})
   )(ChatScreen);
