@@ -34,7 +34,7 @@ export default class ChatScreen extends Component {
 	}
 
 	render() {
-    console.log(this.state);
+    console.log(this.props);
 	  const {
 	    history,
 	    typingUsers,
@@ -79,6 +79,14 @@ export default class ChatScreen extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.history.length !== this.props.history.length) {
+      return true;
+    }
+
+    return false;
+  }
+
   subscribeToChannel() {
     const channel = this.props.selectedChannel.name;
 
@@ -104,7 +112,7 @@ export default class ChatScreen extends Component {
   }
 
   onTypingStateChanged(typing) {
-    const {selectedChannel, userId} = this.props;
+    const { selectedChannel, userId } = this.props;
 
     const channel = selectedChannel.name;
 
@@ -116,7 +124,7 @@ export default class ChatScreen extends Component {
   }
 
   onPresenceChange(presenceData) {
-    const {startTyping, stopTyping} = this.props;
+    const { startTyping, stopTyping } = this.props;
 
     switch (presenceData.action) {
       case 'join':
