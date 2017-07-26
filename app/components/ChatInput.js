@@ -91,9 +91,7 @@ export class ChatInput extends Component {
               onChangeText={text => this.onChangeText(text)}
             />
           </View>
-          <Button style={[ {backgroundColor: "#26a69a"}, styles.w3, styles.h3, styles.rounded, styles.border0 ]} onPress={() => this.onSubmit()}>
-            <Icon name="send" size={25} color="white" />
-          </Button>
+          <Button buttonStyle={[ {backgroundColor: "#26a69a"}, styles.w3, styles.h3, styles.rounded, styles.border0 ]} onPress={() => this.onSubmit()} icon={{name: 'send'}} />
         </View>
       </View>
     );
