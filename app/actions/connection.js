@@ -11,7 +11,7 @@ export const connectionActions = {
 
 			return connect(uuid)
 				.then(({ uuid }) => {
-					dispatch({ type: CONNECTED, payload: uuid });
+					dispatch({ type: CONNECTED, payload: { uuid, channel: uuid.split('::')[0] + '-chat' } });
 				})
 				.catch(error => {
 					dispatch({ type: DISCONNECTED, payload: {error} });

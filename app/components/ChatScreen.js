@@ -162,6 +162,7 @@ const getConversation = state => {
     state.conversation.toJS(),
     {
       typingUsers: state.conversation.get('typingUsers').toArray(),
+      userEmail: state.userReducer.get('email'),
     }
   )
 };

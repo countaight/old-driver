@@ -23,8 +23,8 @@ export const initialState = fromJS({
 
   selectedChannel: {
     type: 'open', // type of channel. open | direct
-    name: channel, // channel name for pubnub api
-    display: channel, // channel display for view
+    name: '', // channel name for pubnub api
+    display: '', // channel display for view
     user: null, // only required for 'direct' channel
   },
 
@@ -34,7 +34,10 @@ export const initialState = fromJS({
 export const conversationReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case CONNECTED:
-      return state.set('userId', payload);
+      return state
+        .set('userId', payload.uuid)
+        .setIn(['selectedChannel', 'name'], payload.channel)
+        .setIn(['selectedChannel', 'display'], payload.channel)
 
     case START_TYPING:
       return state.setIn(['typingUsers', payload], payload);
