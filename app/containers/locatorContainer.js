@@ -4,10 +4,10 @@ import Locator from '../components/Locator';
 import { fetchCoords, postCoords } from '../actions/location';
 
 function mapStateToProps(state) {
-	return {
-		user: state.userReducer.user,
+	return Object.assign({}, {
+		user: state.userReducer.toJS(),
 		location: state.location
-	}
+	})
 }
 
 export default connect(

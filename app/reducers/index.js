@@ -4,8 +4,8 @@ import { reducer as form } from 'redux-form';
 import userReducer from './userReducer';
 import locationReducer from './location';
 import navReducer from './navReducer';
-import {connectionReducer} from './connectionReducer';
-import {conversationReducer} from './conversationReducer';
+import { connectionReducer } from './connectionReducer';
+import { conversationReducer } from './conversationReducer';
 
 export default combineReducers({
 	form,

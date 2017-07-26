@@ -12,12 +12,13 @@ const initialState = {
 	error: null
 };
 
-export default function locationReducer(state = initialState, action) {
-	switch(action.type) {
+export default function locationReducer(state = initialState, { type, payload }) {
+	switch(type) {
 		case FETCH_COORDS:
 			return { ...state, fetching: true };
+
 		case FETCH_COORDS_FULFILLED:
-			const { lat, lng, updated_at } = action.payload
+			const { lat, lng, updated_at } = payload
 
 			return {
 				...state,
@@ -26,11 +27,12 @@ export default function locationReducer(state = initialState, action) {
 				lng,
 				updated_at
 			}
+
 		case FETCH_COORDS_REJECTED:
 			return {
 				...state,
 				fetching: false,
-				error: action.payload
+				error: payload
 			}
 	}
 

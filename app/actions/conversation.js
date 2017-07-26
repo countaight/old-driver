@@ -6,7 +6,6 @@ export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const START_TYPING = 'START_TYPING';
 export const STOP_TYPING = 'STOP_TYPING';
 
-
 export const conversationActions = {
   startTyping(userId) {
     return {type: START_TYPING, payload: userId};
