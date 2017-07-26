@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   ActivityIndicator,
   Modal,
@@ -57,7 +57,7 @@ class ChatContainer extends Component {
 	}
 
 	render () {
-		const {connectionState, failureTrace} = this.props;
+		const { connectionState, failureTrace } = this.props;
 
 		switch (connectionState) {
 			case ConnectionState.Idle:

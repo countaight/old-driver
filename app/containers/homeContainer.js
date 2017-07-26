@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Home from '../components/Home';
-import { changeTxt, submitForm } from '../actions/userActions';
+import { changeTxt, submitForm } from '../actions/user';
 
 function mapStateToProps(state) {
 	return {

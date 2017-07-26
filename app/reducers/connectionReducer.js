@@ -1,4 +1,4 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 import {
   CONNECTING,
@@ -6,15 +6,15 @@ import {
   DISCONNECTED,
 } from '../actions';
 
-import {ConnectionState} from '../constants';
+import { ConnectionState } from '../constants';
 
 export const initialState = fromJS({
   state: ConnectionState.Idle, // connection state
   error: null,                 // failure exception
 });
 
-export const connectionReducer = (state = initialState, action) => {
-  switch (action.type) {
+export const connectionReducer = (state = initialState, { type, payload }) => {
+  switch (type) {
     case CONNECTING:
       return state.merge({ state: ConnectionState.Connecting });
 
@@ -22,10 +22,10 @@ export const connectionReducer = (state = initialState, action) => {
       return state.merge({ state: ConnectionState.Connected });
 
     case DISCONNECTED:
-      if (action.payload.error) {
+      if (payload.error) {
         return state.merge({
           state: ConnectionState.Failed,
-          error: action.payload.error.stack,
+          error: payload.error.stack,
         });
       }
       else {

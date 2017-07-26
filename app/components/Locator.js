@@ -103,7 +103,7 @@ class Locator extends Component {
 			    region={this.state.region}
 			    onRegionChange={(coordinates) => this.setState({...this.state, region: coordinates})}
 				>
-					<MapView.Marker title={user.email} description={`Latitude: ${user.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
+					<MapView.Marker title={user.email} description={`Latitude: ${location.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
 				</MapView>
 				<Text style={{opacity: 0.5, fontFamily: 'ReemKufi-Regular', width: 210}}>
 					<Text>

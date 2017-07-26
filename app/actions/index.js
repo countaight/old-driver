@@ -1,3 +1,4 @@
-export * from './connection.js';
-export * from './conversation.js';
-export * from './userActions.js';
+export * from './connection';
+export * from './conversation';
+export * from './user';
+export * from './location';

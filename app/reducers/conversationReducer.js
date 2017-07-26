@@ -31,7 +31,7 @@ export const initialState = fromJS({
   lastMessageTimestamp: 0,
 });
 
-export const conversationReducer = (state = initialState, {type, payload}) => {
+export const conversationReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case CONNECTED:
       return state.set('userId', payload);

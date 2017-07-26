@@ -1,6 +1,6 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 
-import {config as baseConfiguration} from '../../config';
+import { config as baseConfiguration } from '../../config';
 
 const loopbackAddress =
   Platform.OS === 'ios'

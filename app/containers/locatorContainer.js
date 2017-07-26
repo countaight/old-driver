@@ -5,7 +5,7 @@ import { fetchCoords, postCoords } from '../actions/location';
 
 function mapStateToProps(state) {
 	return {
-		user: state.userReducer.user,
+		user: state.userReducer,
 		location: state.location
 	}
 }

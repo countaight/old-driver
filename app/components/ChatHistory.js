@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
   View,
@@ -13,7 +13,7 @@ import { Icon } from 'react-native-elements';
 
 import styles from '../styles';
 
-import {messageCount} from '../constants';
+import { messageCount } from '../constants';
 
 const renderMessage = (index, data) => {
   const msgDate = new Date(data.When);
