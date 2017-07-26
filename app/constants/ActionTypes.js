@@ -1,5 +1,4 @@
 //FORM Actions
-export const CHANGE_TEXT = 'CHANGE_TEXT'
 export const SUBMIT_FORM = 'SUBMIT_FORM'
 
 //FETCH USER Actions

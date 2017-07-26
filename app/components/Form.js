@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import {
 	Animated,
@@ -7,14 +6,43 @@ import {
 	TouchableHighlight,
 	View
 } from 'react-native';
+import { Field, reduxForm } from 'redux-form';
+
+class myTextField extends Component {
+	render () {
+		const { input, ...inputProps } = this.props;
+		const { error, touched } = inputProps.meta;
+		return (
+			<View>
+				<TextInput
+					ref={input.name}
+					{...inputProps}
+					onBlur={() => inputProps._blurField(input.name, input.value)}
+					onChange={input.onChange}
+					onFocus={() => inputProps._selectField(input.name)}
+					value={input.value}
+				/>
+				{ touched && error && <Text>{error}</Text> }
+			</View>
+		);
+	}
+}
 
 class Form extends Component {
 	constructor (props) {
 		super(props);
+
 		this.state = {
-			email: new Animated.Value(0),
+			"email-address": new Animated.Value(0),
 			password: new Animated.Value(0)
 		}
+	}
+
+	_handleSubmit(obj) {
+		this.props.submitForm({
+			email: obj["email-address"],
+			password: obj.password
+		});
 	}
 
 	_selectField (field) {
@@ -24,8 +52,8 @@ class Form extends Component {
 		).start();
 	}
 
-	_changeField (field) {
-		if (this.props.formFields[field].length === 0) {
+	_blurField (field, value) {
+		if (value.length === 0) {
 			Animated.timing(
 			this.state[field],
 			{toValue: 0}
@@ -34,7 +62,10 @@ class Form extends Component {
 	}
 
 	_focusNextField (nextField) {
-		this.refs[nextField].focus();
+		this.refs[nextField]
+			.getRenderedComponent()
+			.refs[nextField]
+			.focus();
 	}
 
 	_getStyle (field) {
@@ -55,15 +86,8 @@ class Form extends Component {
 		]
 	}
 
-	_onChange (field, text) {
-		this.props.onChangeTxt(field, text);
-	}
-
-	_submit () {
-		this.props.submitForm(this.props.formFields)
-	}
-
 	render() {
+		const { handleSubmit } = this.props;
 		return (
 			<View style={styles.container}>
 				<View style={styles.formContainer}>
@@ -71,37 +95,40 @@ class Form extends Component {
 						Login
 					</Text>
 					<View style={{height: 60}}>
-						<Animated.Text style={this._getStyle('email')}>Email</Animated.Text>
-						<TextInput
+						<Animated.Text style={this._getStyle('email-address')}>Email</Animated.Text>
+						<Field
+							ref='password'
+							name={'email-address'}
+							component={myTextField}
+							_blurField={this._blurField.bind(this)}
+							_selectField={this._selectField.bind(this)}
 							autoCapitalize={'none'}
 							autoCorrect={false}
 							autoFocus={true}
-							keyboardType={"email-address"}
-							onBlur={this._changeField.bind(this, "email")}
-							onChangeText={this._onChange.bind(this, "email")}
-							onFocus={this._selectField.bind(this, "email")}
-							onSubmitEditing={() => this._focusNextField('2')}
-							ref={'1'}
-							returnKeyType={'next'} 
+							keyboardType='email-address'
+							onSubmitEditing={this._focusNextField.bind(this, 'password')}
+							returnKeyType={'next'}
 							style={styles.input}
 						/>
 					</View>
 					<View style={{height: 60}}>
 						<Animated.Text style={this._getStyle('password')}>Password</Animated.Text>
-						<TextInput
-							onBlur={this._changeField.bind(this, "password")}
-							onChangeText={this._onChange.bind(this, "password")}
-							onFocus={this._selectField.bind(this, "password")}
-							onSubmitEditing={this._submit.bind(this)} 
-							ref={'2'} 
-							returnKeyType={'done'} 
-							secureTextEntry={true} 
-							style={styles.input} 
+						<Field
+							ref='password'
+							name='password'
+							component={myTextField}
+							withRef={true}
+							_blurField={this._blurField.bind(this)}
+							_selectField={this._selectField.bind(this)}
+							keyboardType='default'
+							onSubmitEditing={handleSubmit(this._handleSubmit.bind(this))}
+							returnKeyType={'done'}
+							secureTextEntry={true}
+							style={styles.input}
 						/>
 					</View>
 					<TouchableHighlight
-						disabled={this.props.formFields.email.length === 0}
-						onPress={this._submit.bind(this)}
+						onPress={this.props.handleSubmit(this._handleSubmit.bind(this))}
 						style={styles.button}
 						underlayColor="#9cc59c"
 					>
@@ -154,4 +181,18 @@ const styles = {
 	},
 }
 
-export default Form
+const validate = values => {
+	const errors = {};
+
+	if (!values["email-address"]) {
+		errors["email-address"] = "Email is required"
+	}
+
+	if (!values.password) {
+		errors.password = "Password is required"
+	}
+
+	return errors;
+}
+
+export default reduxForm({ form: 'login', validate })(Form)

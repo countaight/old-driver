@@ -1,27 +1,19 @@
 import { Platform, ToastAndroid } from 'react-native';
 
 import {
-	CHANGE_TEXT,
 	SUBMIT_FORM,
 	FETCH_USER,
 	FETCH_USER_FULFILLED,
 	FETCH_USER_REJECTED
 } from '../constants/ActionTypes';
 
-export function changeTxt(field, text) {
-	return {
-		type: CHANGE_TEXT,
-		text,
-		field,
-	}
-}
-
 export function submitForm(fields) {
 	return function(dispatch) {
 		dispatch({
 			type: FETCH_USER
 		});
-		fetch('http://127.0.0.1:3000/login.json', {
+
+		fetch('http://172.16.1.15:3000/login.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
