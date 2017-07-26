@@ -9,19 +9,15 @@ const presenceSubscriptions = new Set();
 
 const messageSubscriptions = new Set();
 
-const identifier = 'oscarTesting';
-
 let connection;
 
-export const connect = () => {
+export const connect = (uuid) => {
 	if (connection) {
 		return connection;
 	}
 
 	connection = new Promise((resolve, reject) => {
-		const uuid = identifier;
-
-		const options = Object.assign({}, config.client, {uuid}, {authKey:'client123'});
+		const options = Object.assign({}, config.client, { uuid }, {authKey:'client123'});
 
 		const pubnub = new PubNub(options);
 

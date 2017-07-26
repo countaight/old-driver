@@ -178,6 +178,10 @@ const makeMapStateToProps = () => {
 
 export const Conversation = connect(
   makeMapStateToProps,
-  Object.assign({}, conversationActions, {
-    disconnect: connectionActions.disconnect})
-  )(ChatScreen);
+  Object.assign({},
+    conversationActions,
+    {
+      disconnect: connectionActions.disconnect
+    }
+  )
+)(ChatScreen);

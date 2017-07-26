@@ -23,11 +23,11 @@ const renderMessage = (index, data) => {
   return (
     <View style={[styles.flx1, styles.flxRow, styles.p1, styles.borderBHl, {borderColor: '#aaa'}]} key={index}>
       <View style={[styles.mt1]}>
-        <Text>{data.Who}</Text>
+        <Text>{data.Who.split('@')[0]}</Text>
       </View>
       <View style={[styles.flxCol, styles.ml2]}>
         <View>
-          <Text>{data.Who}</Text>
+          <Text>{data.Who.split('@')[0]}</Text>
         </View>
         <View style={[styles.flxRow]}>
           <Icon name="alarm" size={14} />

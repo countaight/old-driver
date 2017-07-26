@@ -20,7 +20,8 @@ import styles from '../styles';
 const getConnection = state => {
 	return {
 		connectionState: state.connection.get('state'),
-		failureTrace: state.connection.get('error')
+		failureTrace: state.connection.get('error'),
+		userEmail: state.userReducer.get('email')
 	};
 };
 
@@ -37,7 +38,7 @@ const makeMapStateToProps = () => {
 const mapDispatchToProps =
 	dispatch => ({
 		connect:
-			() => connectionActions.connect()(dispatch),
+			(uuid) => connectionActions.connect(uuid)(dispatch),
 		failure:
 			error => dispatch(connectionActions.failure()),
 	})
@@ -53,7 +54,7 @@ class ChatContainer extends Component {
 	}
 
 	componentDidMount () {
-		this.props.connect();
+		this.props.connect(`${this.props.userEmail}::mobile`);
 	}
 
 	render () {
