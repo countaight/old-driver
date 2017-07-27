@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Locator from '../components/Locator';
-import { fetchCoords, postCoords } from '../actions/location';
+import * as actions from '../actions/location';
 
 function mapStateToProps(state) {
 	return Object.assign({}, {
@@ -12,8 +12,5 @@ function mapStateToProps(state) {
 
 export default connect(
 	mapStateToProps,
-	{
-		fetchCoords: (userId) => fetchCoords(userId),
-		postCoords: (userId, coords) => postCoords(userId, coords),
-	}
+	actions
 )(Locator)
