@@ -26,11 +26,10 @@ export class ChatUsersTyping extends Component {
     return (
       <View style={[{flex: 0}, styles.flxRow]}>
         {users.map(user =>
-          <View key={user.id} style={itemStyle}>
-            <User uri={user.avatarUrl} size={32}/>
+          <View key={user} style={itemStyle}>
             <View style={[styles.ml1]}>
               <Text style={[styles.black, styles.italics, styles.f6, {fontStyle: 'italic'}]}>
-                {user.login}
+                {user.split('@')[0]} is typing...
               </Text>
             </View>
             <View style={{ marginTop: -5, marginLeft: 8, marginRight: 10}}>

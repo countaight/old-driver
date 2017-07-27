@@ -20,6 +20,7 @@ import { channel } from '../constants';
 
 import { ChatHistory } from './ChatHistory';
 import { ChatInput } from './ChatInput';
+import { ChatUsersTyping } from './ChatUsersTyping';
 
 import styles from '../styles';
 
@@ -34,7 +35,6 @@ export default class ChatScreen extends Component {
 	}
 
 	render() {
-    console.log(this.props);
 	  const {
 	    history,
 	    typingUsers,
@@ -58,6 +58,7 @@ export default class ChatScreen extends Component {
 	    <View style={[styles.flx1, styles.flxCol, styles.selfStretch]}>
 	      <View style={containerStyle}>
 	        <ChatHistory ref="chatHistory" history={history} fetchHistory={() => this.fetchHistory()} />
+          <ChatUsersTyping users={typingUsers} />
           <ChatInput
             user={userId}
             setTypingState={typing => this.onTypingStateChanged(typing)}
@@ -81,6 +82,10 @@ export default class ChatScreen extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.history.length !== this.props.history.length) {
+      return true;
+    }
+
+    if (nextProps.typingUsers.length !== this.props.typingUsers.length) {
       return true;
     }
 
@@ -128,6 +133,7 @@ export default class ChatScreen extends Component {
 
     switch (presenceData.action) {
       case 'join':
+        console.log(presenceData);
         break;
       case 'leave':
       case 'timeout':
