@@ -23,7 +23,7 @@ export class ChatInput extends Component {
       clearTimeout(this.timeout);
     }
 
-    const {setTypingState} = this.props;
+    const { setTypingState } = this.props;
 
     if (text == null || text.length === 0) {
       setTypingState(false);
@@ -34,11 +34,11 @@ export class ChatInput extends Component {
       setTypingState(true);
     }
 
-    this.setState({value: text});
+    this.setState({  value: text });
   }
 
   onSubmit(e) {
-    const {props, state} = this;
+    const { props, state } = this;
     const value = state.value;
     if (value.length === 0) {
       return;
@@ -75,7 +75,7 @@ export class ChatInput extends Component {
       {width: 220, borderBottomWidth: 0},
     ];
 
-    const {user} = this.props;
+    const { user } = this.props;
 
     return (
       <View style={containerStyle}>

@@ -5,24 +5,24 @@ export const CONNECTED = 'CONNECTED';
 export const DISCONNECTED = 'DISCONNECTED';
 
 export const connectionActions = {
-	connect() {
+	connect(uuid) {
 		return dispatch => {
 			dispatch({type: CONNECTING});
 
-			return connect()
+			return connect(uuid)
 				.then(({ uuid }) => {
-					dispatch({ type: CONNECTED, payload: uuid });
+					dispatch({ type: CONNECTED, payload: { uuid, channel: uuid.split('::')[0] + '-chat' } });
 				})
 				.catch(error => {
 					dispatch({ type: DISCONNECTED, payload: {error} });
 
-					const reconnect = () => connectionActions.connect()(dispatch);
+					const reconnect = (uuid) => connectionActions.connect(uuid)(dispatch);
 
 					setTimeout(reconnect, 1500);
 				});
 		};
 	},
-	
+
 	disconnect() {
 		return dispatch => {
 			disconnect().then(() => dispatch({ type: DISCONNECTED, payload: {} }));
