@@ -133,7 +133,6 @@ export default class ChatScreen extends Component {
 
     switch (presenceData.action) {
       case 'join':
-        console.log(presenceData);
         break;
       case 'leave':
       case 'timeout':

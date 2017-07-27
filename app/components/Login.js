@@ -39,7 +39,7 @@ class Login extends Component {
 	}
 
 	render() {
-		const { fetching } = this.props.user
+		const { fetching, fetched } = this.props.user
 		return (
 			<View style={styles.container}>
 				<Animated.Image
@@ -48,7 +48,7 @@ class Login extends Component {
 					source={require('../imgs/backgroundTruck.jpeg')}
 					style={this._getStyle()}
 				>
-					{ fetching ? <ActivityIndicator size="large" color="#006838"/> : <Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} /> }
+					{ fetching || fetched ? <ActivityIndicator size="large" color="#006838"/> : <Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} /> }
 				</Animated.Image>
 			</View>
 		)

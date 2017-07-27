@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
 import {
+	AppState,
+	AsyncStorage,
 	Platform,
 	StatusBar,
 	StyleSheet,
@@ -26,6 +28,7 @@ class Locator extends Component {
 
 	constructor (props) {
 		super(props);
+
 		this.state = {
 			region: {
 				latitude: 0,
@@ -35,10 +38,13 @@ class Locator extends Component {
 			},
 			messageText: 'Nothing Yet',
 		};
+
+		this._handleAppStateChange = this._handleAppStateChange.bind(this);
 	}
 
 	componentDidMount() {
 		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
+
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
 				let lng = position.coords.longitude;
@@ -63,9 +69,13 @@ class Locator extends Component {
 				this.setState({...this.state, messageText: e.data});
 			}
 		}
+
+		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
 	componentWillUnmount() {
+		AppState.removeEventListener('change', this._handleAppStateChange);
+
 		navigator.geolocation.clearWatch(this.watchID);
 		this.ws.close();
 		this.ws = null;
@@ -73,6 +83,11 @@ class Locator extends Component {
 
 	_fetchCoords() {
 		this.props.fetchCoords(this.props.user.id);
+	}
+
+	_handleAppStateChange(nextAppState) {
+		const { user, location } = this.props;
+		this.props.postCoords(user.id, { lng: location.lng, lat: location.lat });
 	}
 
 	_updateCoords(userId, coords) {
@@ -85,11 +100,12 @@ class Locator extends Component {
 			this.ws.send(JSON.stringify(message));
 		}
 
-		this.props.postCoords(userId, coords);
+		this.props.updateCoords(coords);
 	}
 
 	render() {
 		const { user, location } = this.props;
+
 		return (
 			<View style={styles.container}>
 				<MapView
@@ -105,14 +121,6 @@ class Locator extends Component {
 				>
 					<MapView.Marker title={user.email} description={`Latitude: ${location.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
 				</MapView>
-				<Text style={{opacity: 0.5, fontFamily: 'ReemKufi-Regular', width: 210}}>
-					<Text>
-						Keep this tab open to continue sending your location.{"\n"}
-					</Text>
-					<Text>
-						Last updated: {Moment(location.updated_at).fromNow()}
-					</Text>
-				</Text>
 				<Text onPress={() => this.setState({...this.state, region: {latitude: location.lat, longitude: location.lng, latitudeDelta: 0.1022, longitudeDelta: 0.0521}})}>
 					Find Me!
 				</Text>

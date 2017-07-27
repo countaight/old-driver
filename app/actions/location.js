@@ -23,8 +23,14 @@ export function fetchCoords(userId) {
 	}
 }
 
+export function updateCoords(coords) {
+	return { type: FETCH_COORDS_FULFILLED, payload: coords };
+}
+
 export function postCoords(userId, coords) {
 	return function(dispatch) {
+		dispatch({ type: FETCH_COORDS });
+
 		fetch('http://172.16.1.15:3000/testing.json', {
 			method: 'post',
 			headers: {
@@ -43,6 +49,6 @@ export function postCoords(userId, coords) {
 				payload: respJSON.body
 			});
 		})
-		.catch((error) => console.error(error))
+		.catch((error) => dispatch({ type: FETCH_COORDS_REJECTED, payload: error }));
 	}
 }
