@@ -13,7 +13,7 @@ import {
 	View
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { Icon } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 
 class Locator extends Component {
 	static navigationOptions = {
@@ -43,7 +43,7 @@ class Locator extends Component {
 	}
 
 	componentDidMount() {
-		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
+		this.ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
 
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
@@ -103,6 +103,31 @@ class Locator extends Component {
 		this.props.updateCoords(coords);
 	}
 
+	_determineMapView() {
+		const { params } = this.props.navigation.state;
+
+		if (params) {
+			if (Object.keys(params.location).length === 0) {
+				return this.state.region;
+			}
+
+			return {
+				longitude: params.location.lng,
+				latitude: params.location.lat,
+				latitudeDelta: 0.1022,
+				longitudeDelta: 0.0521,
+			};
+		}
+
+		return this.state.region;
+	}
+
+	_handleRegionChange(coords) {
+		this.props.navigation.setParams({ location: {} });
+
+		this.setState({...this.state, region: coords});
+	}
+
 	render() {
 		const { user, location } = this.props;
 
@@ -116,15 +141,29 @@ class Locator extends Component {
 			      latitudeDelta: 0.1022,
 			      longitudeDelta: 0.0521,
 			    }}
-			    region={this.state.region}
-			    onRegionChange={(coordinates) => this.setState({...this.state, region: coordinates})}
+			    region={this._determineMapView()}
+			    onRegionChange={this._handleRegionChange.bind(this)}
 				>
 					<MapView.Marker title={user.email} description={`Latitude: ${location.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
 				</MapView>
-				<Text onPress={() => this.setState({...this.state, region: {latitude: location.lat, longitude: location.lng, latitudeDelta: 0.1022, longitudeDelta: 0.0521}})}>
-					Find Me!
-				</Text>
-				{Platform.OS === 'ios' ? <Text>{this.state.messageText}</Text> : null}
+				<Button
+					icon={{name: 'my-location', size: 25, style: {marginRight: 0}}}
+					buttonStyle={styles.button}
+					borderRadius={2}
+					onPress={() => {
+						this.props.navigation.setParams({ location: {} });
+
+						this.setState({
+							...this.state,
+							region: {
+								latitude: location.lat,
+								longitude: location.lng,
+								latitudeDelta: 0.1022,
+								longitudeDelta: 0.0521
+							}
+						});
+					}
+				} />
 			</View>
 		)
 	}
@@ -133,14 +172,14 @@ class Locator extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
+		justifyContent: 'flex-end',
+		alignItems: 'flex-end',
 		backgroundColor: '#E9E9EF',
 	},
 	button: {
-		height: 90,
-		width: 210,
-		backgroundColor: '#006838',
+		padding: 5,
+		marginBottom: '5%',
+		backgroundColor: '#639772',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
@@ -151,7 +190,10 @@ const styles = StyleSheet.create({
 	},
 	map: {
 	   ...StyleSheet.absoluteFillObject,
-	 },
+	},
+	text: {
+		top: 100
+	}
 })
 
 export default Locator;

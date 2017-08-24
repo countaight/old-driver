@@ -31,7 +31,7 @@ export function postCoords(userId, coords) {
 	return function(dispatch) {
 		dispatch({ type: FETCH_COORDS });
 
-		fetch('http://172.16.1.15:3000/testing.json', {
+		fetch('https://noeltrans.herokuapp.com/testing.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',

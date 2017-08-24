@@ -13,7 +13,7 @@ export function submitForm(fields) {
 			type: FETCH_USER
 		});
 
-		fetch('http://172.16.1.15:3000/login.json', {
+		fetch('http://localhost:3000/login.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',
@@ -45,6 +45,8 @@ export function submitForm(fields) {
 			});
 			if (Platform.OS === 'android') {
 				ToastAndroid.show('Email/Password combinations was incorrect. Try again.', ToastAndroid.SHORT);
+			} else {
+				console.log(error);
 			}
 		})
 	}
