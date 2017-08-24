@@ -144,7 +144,7 @@ class Locator extends Component {
 			    region={this._determineMapView()}
 			    onRegionChange={this._handleRegionChange.bind(this)}
 				>
-					<MapView.Marker title={user.email} description={`Latitude: ${location.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
+					<MapView.Marker title={user.name} description={`Latitude: ${location.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
 				</MapView>
 				<Button
 					icon={{name: 'my-location', size: 25, style: {marginRight: 0}}}
