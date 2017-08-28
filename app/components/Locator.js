@@ -3,6 +3,7 @@ import Moment from 'moment';
 import {
 	AppState,
 	AsyncStorage,
+	Linking,
 	Platform,
 	StatusBar,
 	StyleSheet,
@@ -42,7 +43,7 @@ class Locator extends Component {
 		this._handleAppStateChange = this._handleAppStateChange.bind(this);
 	}
 
-	componentDidMount() {
+	componentDidMount () {
 		this.ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
 
 		this.watchID = navigator.geolocation.watchPosition(
@@ -73,7 +74,7 @@ class Locator extends Component {
 		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount () {
 		AppState.removeEventListener('change', this._handleAppStateChange);
 
 		navigator.geolocation.clearWatch(this.watchID);
@@ -81,16 +82,16 @@ class Locator extends Component {
 		this.ws = null;
 	}
 
-	_fetchCoords() {
+	_fetchCoords () {
 		this.props.fetchCoords(this.props.user.id);
 	}
 
-	_handleAppStateChange(nextAppState) {
+	_handleAppStateChange (nextAppState) {
 		const { user, location } = this.props;
 		this.props.postCoords(user.id, { lng: location.lng, lat: location.lat });
 	}
 
-	_updateCoords(userId, coords) {
+	_updateCoords (userId, coords) {
 		const message = {
 			id: userId,
 			coordinates: coords,
@@ -103,7 +104,7 @@ class Locator extends Component {
 		this.props.updateCoords(coords);
 	}
 
-	_determineMapView() {
+	_determineMapView () {
 		const { params } = this.props.navigation.state;
 
 		if (params) {
@@ -122,10 +123,54 @@ class Locator extends Component {
 		return this.state.region;
 	}
 
-	_handleRegionChange(coords) {
+	_handleRegionChange (coords) {
 		this.props.navigation.setParams({ location: {} });
 
 		this.setState({...this.state, region: coords});
+	}
+
+	_followLink(coords) {
+		console.log(coords);
+		const url = `http://maps.apple.com/?q=${coords.lat},${coords.lng}`
+		Linking.canOpenURL(url).then(supported => {
+		  if (!supported) {
+		    console.log('Can\'t handle url: ' + url);
+		  } else {
+		    return Linking.openURL(url);
+		  }
+		}).catch(err => console.error('An error occurred', err));
+	}
+
+	_renderAssignments () {
+		const { user, location } = this.props;
+		const initMarker = (
+			<MapView.Marker
+				key={'user-' + user.id}
+				title={user.name}
+				description={`Latitude: ${location.lat} Longitude: ${location.lng}`}
+				pinColor={"darkgreen"}
+				coordinate={{latitude: location.lat, longitude: location.lng}}
+			/>
+		);
+
+		if (user.assignments.length > 0) {
+			return user.assignments.map(assignment => {
+				const { place } = assignment;
+
+				return (
+					<MapView.Marker
+						key={assignment.id}
+						title={assignment.place.name}
+						pinColor={assignment.pu_del === 'PU' ? 'lightgreen' : 'orange'}
+						coordinate={{latitude: place.location.lat, longitude: place.location.lng}}
+						description={'Click to open in Maps'}
+						onCalloutPress={this._followLink.bind(this, place.location)}
+					/>
+				)
+			}).concat(initMarker)
+		}
+
+		return initMarker;
 	}
 
 	render() {
@@ -144,7 +189,7 @@ class Locator extends Component {
 			    region={this._determineMapView()}
 			    onRegionChange={this._handleRegionChange.bind(this)}
 				>
-					<MapView.Marker title={user.name} description={`Latitude: ${location.lat} Longitude: ${location.lng}`} pinColor={"darkgreen"} coordinate={{latitude: location.lat, longitude: location.lng}} />
+					{this._renderAssignments()}
 				</MapView>
 				<Button
 					icon={{name: 'my-location', size: 25, style: {marginRight: 0}}}
