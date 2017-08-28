@@ -12,8 +12,7 @@ export function submitForm(fields) {
 		dispatch({
 			type: FETCH_USER
 		});
-		console.log(fields);
-		fetch('http://localhost:3000/login.json', {
+		fetch('http://172.16.1.15:3000/login.json', {
 			method: 'post',
 			headers: {
 				'Accept': 'application/json',

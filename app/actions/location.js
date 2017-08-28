@@ -31,11 +31,11 @@ export function postCoords(userId, coords) {
 	return function(dispatch) {
 		dispatch({ type: FETCH_COORDS });
 
-		fetch('http://172.16.1.15:3000/login.json', {
-			method: 'POST',
+		fetch('http://172.16.1.15:3000/testing.json', {
+			method: 'post',
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/x-www-form-urlencoded',
+				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				userId: userId,

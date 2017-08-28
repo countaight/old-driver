@@ -44,7 +44,7 @@ class Locator extends Component {
 	}
 
 	componentDidMount () {
-		this.ws = new WebSocket("wss://noeltrans.herokuapp.com/mapsocket");
+		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
 
 		this.watchID = navigator.geolocation.watchPosition(
 			(position) => {
