@@ -21,6 +21,7 @@ const AppNavigator = StackNavigator({
 		}, {
 			tabBarComponent: TabBarBottom,
 			tabBarPosition: 'bottom',
+			lazy: true,
 			animationEnabled: true,
 			tabBarOptions: {
 				inactiveBackgroundColor: '#E9E9E9',
