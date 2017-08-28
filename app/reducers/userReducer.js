@@ -10,7 +10,9 @@ import {
 
 const initialState = fromJS({
 	id: null,
-	email: "unknown",
+	name: "",
+	email: "",
+	assignments: [],
 	fetching: false,
 	fetched: false,
 	error: null,
@@ -25,11 +27,14 @@ export default function userReducer(state = initialState, { type, payload }) {
 			return state.merge({ fetching: false, error: payload });
 
 		case FETCH_USER_FULFILLED:
-			const { id, email } = payload;
+			console.log(payload);
+			const { id, name, email, assignments } = payload;
 
 			return state.merge({
 				id,
+				name,
 				email,
+				assignments,
 				fetching: false,
 				fetched: true,
 			});

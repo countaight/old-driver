@@ -31,11 +31,11 @@ export function postCoords(userId, coords) {
 	return function(dispatch) {
 		dispatch({ type: FETCH_COORDS });
 
-		fetch('https://noeltrans.herokuapp.com/testing.json', {
-			method: 'post',
+		fetch('http://172.16.1.15:3000/login.json', {
+			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			body: JSON.stringify({
 				userId: userId,

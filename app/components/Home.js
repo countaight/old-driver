@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+	Dimensions,
 	StyleSheet,
 	Text,
 	View,
@@ -28,15 +29,31 @@ class Home extends Component {
 		return false;
 	}
 
+	_renderAssignments () {
+		return this.props.user.assignments.map(assignment => {
+			let color = assignment.pu_del === 'PU' ? 'lightgreen' : 'orange'
+			return (
+				<ListItem
+					key={assignment.id}
+					containerStyle={{backgroundColor: color}}
+					title={assignment.place.name}
+					onPress={() => this.props.navigation.navigate('Locator', { location: assignment.place.location })}
+				/>
+			)
+		})
+	}
+
 	render () {
+		const { user } = this.props;
+		const { width, height } = Dimensions.get('window');
+
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>Welcome to the Noel Transportation App. Stay on the Locator tab to send location.</Text>
-				<List>
-					<ListItem
-						title='Noel Transportation'
-						onPress={() => this.props.navigation.navigate('Locator', { location: { lat: 41.9434762, lng: -87.9039103 } })}
-					/>
+				<Text style={styles.welcome}>
+					Welcome, {user.name}!{'\n'}
+				</Text>
+				<List containerStyle={{ width: (width * .90) }}>
+					{this._renderAssignments()}
 				</List>
 			</View>
 		)
@@ -46,9 +63,9 @@ class Home extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 0,
+		paddingTop: '10%',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 	},
 	welcome: {
 		textAlign: 'center',

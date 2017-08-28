@@ -12,7 +12,7 @@ export function submitForm(fields) {
 		dispatch({
 			type: FETCH_USER
 		});
-
+		console.log(fields);
 		fetch('http://localhost:3000/login.json', {
 			method: 'post',
 			headers: {
@@ -44,6 +44,7 @@ export function submitForm(fields) {
 				payload: error
 			});
 			if (Platform.OS === 'android') {
+				console.log(error);
 				ToastAndroid.show('Email/Password combinations was incorrect. Try again.', ToastAndroid.SHORT);
 			} else {
 				console.log(error);
