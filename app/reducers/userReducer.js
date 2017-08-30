@@ -27,7 +27,6 @@ export default function userReducer(state = initialState, { type, payload }) {
 			return state.merge({ fetching: false, error: payload });
 
 		case FETCH_USER_FULFILLED:
-			console.log(payload);
 			const { id, name, email, assignments } = payload;
 
 			return state.merge({

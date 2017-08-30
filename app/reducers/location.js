@@ -5,8 +5,7 @@ import {
 } from '../constants/ActionTypes'
 
 const initialState = {
-	lng: 0,
-	lat: 0,
+	coordinates: { lat: 0, lng: 0 },
 	updated_at: null,
 	fetching: false,
 	error: null
@@ -18,13 +17,12 @@ export default function locationReducer(state = initialState, { type, payload })
 			return { ...state, fetching: true };
 
 		case FETCH_COORDS_FULFILLED:
-			const { lat, lng, updated_at } = payload
+			const { coordinates, updated_at } = payload;
 
 			return {
 				...state,
 				fetching: false,
-				lat,
-				lng,
+				coordinates,
 				updated_at
 			}
 
