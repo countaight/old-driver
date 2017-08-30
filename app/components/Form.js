@@ -104,7 +104,6 @@ class Form extends Component {
 							_selectField={this._selectField.bind(this)}
 							autoCapitalize={'none'}
 							autoCorrect={false}
-							autoFocus={true}
 							keyboardType='email-address'
 							onSubmitEditing={this._focusNextField.bind(this, 'password')}
 							returnKeyType={'next'}

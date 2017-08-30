@@ -21,7 +21,8 @@ class Login extends Component {
 	}
 
 	render() {
-		const { fetching, fetched } = this.props.user
+		const { fetching, fetched } = this.props.user;
+
 		return (
 			<View style={styles.container}>
 				<ImageBackground

@@ -48,8 +48,6 @@ class Locator extends Component {
 	}
 
 	componentDidMount () {
-		console.log("Locator Mounted");
-
 		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
 
 		this.watchID = navigator.geolocation.watchPosition(
@@ -81,8 +79,6 @@ class Locator extends Component {
 	}
 
 	componentWillUnmount () {
-		console.log("Locator will unmount");
-
 		AppState.removeEventListener('change', this._handleAppStateChange);
 
 		navigator.geolocation.clearWatch(this.watchID);
@@ -110,8 +106,10 @@ class Locator extends Component {
 	}
 
 	_handleAppStateChange (nextAppState) {
+		console.log(nextAppState);
+
 		const { user, location } = this.props;
-		if (nextAppState === 'inactive' || nextAppState === 'active') {
+		if (nextAppState === 'background' || nextAppState === 'active') {
 			this.props.postCoords(user.id, location.coordinates);
 		}
 	}
