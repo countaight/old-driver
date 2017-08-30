@@ -3,6 +3,7 @@ import Moment from 'moment';
 import {
 	AppState,
 	AsyncStorage,
+	Dimensions,
 	Linking,
 	Platform,
 	StatusBar,
@@ -15,6 +16,8 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Button, Icon } from 'react-native-elements';
+
+const { width, height } = Dimensions.get('window');
 
 class Locator extends Component {
 	static navigationOptions = {
@@ -32,8 +35,8 @@ class Locator extends Component {
 
 		this.state = {
 			region: {
-				latitude: 0,
-				longitude: 0,
+				latitude: props.location.coordinates.lat || 0,
+				longitude: props.location.coordinates.lng || 0,
 				latitudeDelta: 0.1022,
 				longitudeDelta: 0.0521,
 			},
@@ -41,9 +44,12 @@ class Locator extends Component {
 		};
 
 		this._handleAppStateChange = this._handleAppStateChange.bind(this);
+		this._handleRegionChange = this._handleRegionChange.bind(this);
 	}
 
 	componentDidMount () {
+		console.log("Locator Mounted");
+
 		this.ws = new WebSocket("ws://172.16.1.15:3000/mapsocket");
 
 		this.watchID = navigator.geolocation.watchPosition(
@@ -75,11 +81,28 @@ class Locator extends Component {
 	}
 
 	componentWillUnmount () {
+		console.log("Locator will unmount");
+
 		AppState.removeEventListener('change', this._handleAppStateChange);
 
 		navigator.geolocation.clearWatch(this.watchID);
 		this.ws.close();
 		this.ws = null;
+	}
+
+	_setupMap () {
+		const { params } = this.props.navigation.state;
+
+		if (params) {
+			this.map.animateToRegion({
+				latitude: params.location.lat,
+				longitude: params.location.lng,
+				latitudeDelta: 0.1022,
+				longitudeDelta: 0.0521,
+			});
+		} else {
+			this.map.animateToRegion(this.state.region);
+		}
 	}
 
 	_fetchCoords () {
@@ -88,7 +111,9 @@ class Locator extends Component {
 
 	_handleAppStateChange (nextAppState) {
 		const { user, location } = this.props;
-		this.props.postCoords(user.id, { lng: location.lng, lat: location.lat });
+		if (nextAppState === 'inactive' || nextAppState === 'active') {
+			this.props.postCoords(user.id, location.coordinates);
+		}
 	}
 
 	_updateCoords (userId, coords) {
@@ -101,7 +126,7 @@ class Locator extends Component {
 			this.ws.send(JSON.stringify(message));
 		}
 
-		this.props.updateCoords(coords);
+		this.props.updateCoords({ coordinates: coords, updated_at: Date.now() });
 	}
 
 	_determineMapView () {
@@ -123,35 +148,37 @@ class Locator extends Component {
 		return this.state.region;
 	}
 
-	_handleRegionChange (coords) {
+	_handleRegionChange (region) {
 		this.props.navigation.setParams({ location: {} });
 
-		this.setState({...this.state, region: coords});
+		this.setState({ ...this.state, region });
 	}
 
 	_followLink(coords) {
-		console.log(coords);
 		const url = `http://maps.apple.com/?q=${coords.lat},${coords.lng}`
+
 		Linking.canOpenURL(url).then(supported => {
 		  if (!supported) {
 		    console.log('Can\'t handle url: ' + url);
 		  } else {
 		    return Linking.openURL(url);
 		  }
-		}).catch(err => console.error('An error occurred', err));
+		})
+			.catch(err => console.error('An error occurred', err));
 	}
 
 	_renderAssignments () {
 		const { user, location } = this.props;
-		const initMarker = (
+
+		let initMarker = (
 			<MapView.Marker
-				key={'user-' + user.id}
+				key={"user-" + user.id}
 				title={user.name}
-				description={`Latitude: ${location.lat} Longitude: ${location.lng}`}
-				pinColor={"darkgreen"}
-				coordinate={{latitude: location.lat, longitude: location.lng}}
+				pinColor={'#006838'}
+				description={`Latitude: ${location.coordinates.lat}, Longitude: ${location.coordinates.lat}`}
+				coordinate={{latitude: location.coordinates.lat, longitude: location.coordinates.lng}}
 			/>
-		);
+		)
 
 		if (user.assignments.length > 0) {
 			return user.assignments.map(assignment => {
@@ -165,9 +192,10 @@ class Locator extends Component {
 						coordinate={{latitude: place.location.lat, longitude: place.location.lng}}
 						description={'Click to open in Maps'}
 						onCalloutPress={this._followLink.bind(this, place.location)}
+						loadingEnabled={true}
 					/>
 				)
-			}).concat(initMarker)
+			}).concat(initMarker);
 		}
 
 		return initMarker;
@@ -179,15 +207,12 @@ class Locator extends Component {
 		return (
 			<View style={styles.container}>
 				<MapView
+					ref={ref => this.map = ref}
 					style={styles.map}
-			    initialRegion={{
-			      latitude: location.lat,
-			      longitude: location.lng,
-			      latitudeDelta: 0.1022,
-			      longitudeDelta: 0.0521,
-			    }}
+					initialRegion={this.state.region}
 			    region={this._determineMapView()}
-			    onRegionChange={this._handleRegionChange.bind(this)}
+			    onRegionChange={this._handleRegionChange}
+			    onMapLoaded={this._setupMap.bind(this)}
 				>
 					{this._renderAssignments()}
 				</MapView>
@@ -201,8 +226,8 @@ class Locator extends Component {
 						this.setState({
 							...this.state,
 							region: {
-								latitude: location.lat,
-								longitude: location.lng,
+								latitude: location.coordinates.lat,
+								longitude: location.coordinates.lng,
 								latitudeDelta: 0.1022,
 								longitudeDelta: 0.0521
 							}

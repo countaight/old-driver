@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
 	ActivityIndicator,
 	Animated,
-	Image,
+	Dimensions,
+	ImageBackground,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -15,56 +16,35 @@ class Login extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			fadeAnim: new Animated.Value(0),
 			loaded: false
 		};
-
-		this._renderForm = this._renderForm.bind(this);
-	}
-
-	_getStyle () {
-		return [
-			styles.image,
-			{
-				opacity: this.state.fadeAnim,
-			}
-		]
-	}
-
-	_renderForm () {
-		Animated.timing(
-			this.state.fadeAnim,
-			{toValue: 1}
-		).start();
 	}
 
 	render() {
 		const { fetching, fetched } = this.props.user
 		return (
 			<View style={styles.container}>
-				<Animated.Image
+				<ImageBackground
 					onLoad={this._renderForm}
-					resizeMode={'contain'}
+					resizeMode={'cover'}
 					source={require('../imgs/backgroundTruck.jpeg')}
-					style={this._getStyle()}
+					style={styles.image}
 				>
 					{ fetching || fetched ? <ActivityIndicator size="large" color="#006838"/> : <Form formFields={{email: this.props.user.email, password: this.props.user.password}} onChangeTxt={this.props.onChangeTxt} submitForm={this.props.submitForm} /> }
-				</Animated.Image>
+				</ImageBackground>
 			</View>
 		)
 	}
 }
 
+const { height, width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		paddingTop: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
+		...StyleSheet.absoluteFillObject,
 	},
 	image: {
-		height: '100%',
-		justifyContent: 'center',
+		height: '100%'
 	},
 })
 

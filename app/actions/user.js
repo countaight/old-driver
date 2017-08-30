@@ -4,7 +4,8 @@ import {
 	SUBMIT_FORM,
 	FETCH_USER,
 	FETCH_USER_FULFILLED,
-	FETCH_USER_REJECTED
+	FETCH_USER_REJECTED,
+	FETCH_COORDS_FULFILLED,
 } from '../constants/ActionTypes';
 
 export function submitForm(fields) {
@@ -28,6 +29,12 @@ export function submitForm(fields) {
 				type: FETCH_USER_FULFILLED,
 				payload: respJSON.body
 			});
+
+			dispatch({
+				type: FETCH_COORDS_FULFILLED,
+				payload: respJSON.body
+			});
+
 			dispatch({
 				type: 'Navigation/NAVIGATE',
 				routeName: 'LoggedIn'

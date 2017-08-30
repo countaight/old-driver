@@ -46,7 +46,7 @@ export function postCoords(userId, coords) {
 		.then((respJSON) => {
 			dispatch({
 				type: FETCH_COORDS_FULFILLED,
-				payload: respJSON.body
+				payload: { coordinates: respJSON.body, updated_at: Date.now() }
 			});
 		})
 		.catch((error) => dispatch({ type: FETCH_COORDS_REJECTED, payload: error }));
