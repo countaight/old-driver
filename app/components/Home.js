@@ -5,7 +5,7 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { Icon, List, ListItem } from 'react-native-elements';
+import { Card, Icon, List, ListItem } from 'react-native-elements';
 
 class Home extends Component {
 	static navigationOptions = {
@@ -31,11 +31,16 @@ class Home extends Component {
 
 	_renderAssignments () {
 		return this.props.user.assignments.map(assignment => {
-			let color = assignment.pu_del === 'PU' ? 'lightgreen' : 'orange'
+			let color = assignment.pu_del === 'PU' ? '#006838' : 'orange'
+			let chevronColor = assignment.pu_del === 'PU' ? '#4c9573' : '#CC6E2F'
 			return (
 				<ListItem
 					key={assignment.id}
+					leftIcon={{name: 'local-shipping', color: chevronColor}}
+					titleStyle={{color: 'white'}}
 					containerStyle={{backgroundColor: color}}
+					chevronColor={chevronColor}
+					underlayColor={chevronColor}
 					title={assignment.place.name}
 					onPress={() => this.props.navigation.navigate('Locator', { location: assignment.place.location })}
 				/>
@@ -45,13 +50,27 @@ class Home extends Component {
 
 	render () {
 		const { user } = this.props;
+		console.log(user);
 		const { width, height } = Dimensions.get('window');
 
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>
-					Welcome, {user.name}!{'\n'}
-				</Text>
+				<Card
+					flexDirection="row"
+					containerStyle={{width: Dimensions.get('window').width, margin: 0}}
+				>
+					<Icon
+						name='person'
+						containerStyle={{ flex: 1, alignItems: 'flex-start' }}
+						size={50}
+					/>
+					<Text style={styles.welcome}>
+						{user.name}{'\n'}
+						<Text style={styles.text}>
+							No. of Stops: {user.assignments.length}
+						</Text>
+					</Text>
+				</Card>
 				<List containerStyle={{ width: (width * .90) }}>
 					{this._renderAssignments()}
 				</List>
@@ -63,15 +82,18 @@ class Home extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: '10%',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 	},
 	welcome: {
-		textAlign: 'center',
+		flex: 1,
+		textAlign: 'right',
 		fontSize: 16,
-		width: 300,
 		fontFamily: 'Montserrat-Regular'
+	},
+	text: {
+		textAlign: 'right',
+		fontSize: 12
 	}
 })
 

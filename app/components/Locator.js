@@ -106,8 +106,6 @@ class Locator extends Component {
 	}
 
 	_handleAppStateChange (nextAppState) {
-		console.log(nextAppState);
-
 		const { user, location } = this.props;
 		if (nextAppState === 'background' || nextAppState === 'active') {
 			this.props.postCoords(user.id, location.coordinates);
@@ -173,7 +171,7 @@ class Locator extends Component {
 				key={"user-" + user.id}
 				title={user.name}
 				pinColor={'#006838'}
-				description={`Latitude: ${location.coordinates.lat}, Longitude: ${location.coordinates.lat}`}
+				description={`Latitude: ${location.coordinates.lat}, Longitude: ${location.coordinates.lng}`}
 				coordinate={{latitude: location.coordinates.lat, longitude: location.coordinates.lng}}
 			/>
 		)
@@ -190,7 +188,7 @@ class Locator extends Component {
 						coordinate={{latitude: place.location.lat, longitude: place.location.lng}}
 						description={'Click to open in Maps'}
 						onCalloutPress={this._followLink.bind(this, place.location)}
-						loadingEnabled={true}
+						draggable
 					/>
 				)
 			}).concat(initMarker);
@@ -211,6 +209,7 @@ class Locator extends Component {
 			    region={this._determineMapView()}
 			    onRegionChange={this._handleRegionChange}
 			    onMapLoaded={this._setupMap.bind(this)}
+			    loadedEnabled={true}
 				>
 					{this._renderAssignments()}
 				</MapView>
