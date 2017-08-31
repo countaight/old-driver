@@ -50,7 +50,6 @@ class Home extends Component {
 
 	render () {
 		const { user } = this.props;
-		console.log(user);
 		const { width, height } = Dimensions.get('window');
 
 		return (

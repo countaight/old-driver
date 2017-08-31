@@ -23,6 +23,8 @@ const AppNavigator = StackNavigator({
 			tabBarPosition: 'bottom',
 			lazy: true,
 			animationEnabled: true,
+			backBehavior: 'initialRoute',
+			initialRouteName: 'Home',
 			tabBarOptions: {
 				inactiveBackgroundColor: '#E9E9E9',
 				showLabel: false,

@@ -3,6 +3,7 @@ import Moment from 'moment';
 import {
 	AppState,
 	AsyncStorage,
+	BackHandler,
 	Dimensions,
 	Linking,
 	Platform,
@@ -45,6 +46,7 @@ class Locator extends Component {
 
 		this._handleAppStateChange = this._handleAppStateChange.bind(this);
 		this._handleRegionChange = this._handleRegionChange.bind(this);
+		this._handleBackButton = this._handleBackButton.bind(this);
 	}
 
 	componentDidMount () {
@@ -76,14 +78,27 @@ class Locator extends Component {
 		}
 
 		AppState.addEventListener('change', this._handleAppStateChange);
+		BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
 	}
 
 	componentWillUnmount () {
 		AppState.removeEventListener('change', this._handleAppStateChange);
+		BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
 
 		navigator.geolocation.clearWatch(this.watchID);
 		this.ws.close();
 		this.ws = null;
+	}
+
+	_handleBackButton () {
+		const { screenProps } = this.props;
+
+		if (screenProps.routes[1].index === 1) {
+			this.props.navigation.goBack();
+			return true;
+		}
+
+		BackHandler.exitApp();
 	}
 
 	_setupMap () {
