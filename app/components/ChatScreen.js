@@ -6,6 +6,7 @@ import {
 	Dimensions
 } from 'react-native';
 import { createSelector } from 'reselect';
+import { SideMenu } from 'react-native-elements';
 
 import {
   history,
@@ -62,7 +63,8 @@ export default class ChatScreen extends Component {
           <ChatInput
             user={userId}
             setTypingState={typing => this.onTypingStateChanged(typing)}
-            publishMessage={message => this.onPublishMessage(message)} />
+            publishMessage={message => this.onPublishMessage(message)}
+          />
 	      </View>
 	    </View>
 	  );
