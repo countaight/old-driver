@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import { Card, Icon, List, ListItem } from 'react-native-elements';
 
+import Assignment from './Assignment';
+
 class Home extends Component {
 	static navigationOptions = {
 		tabBarLabel: 'Home',
@@ -31,20 +33,7 @@ class Home extends Component {
 
 	_renderAssignments () {
 		return this.props.user.assignments.map(assignment => {
-			let color = assignment.pu_del === 'PU' ? '#006838' : 'orange'
-			let chevronColor = assignment.pu_del === 'PU' ? '#4c9573' : '#CC6E2F'
-			return (
-				<ListItem
-					key={assignment.id}
-					leftIcon={{name: 'local-shipping', color: chevronColor}}
-					titleStyle={{color: 'white'}}
-					containerStyle={{backgroundColor: color}}
-					chevronColor={chevronColor}
-					underlayColor={chevronColor}
-					title={assignment.place.name}
-					onPress={() => this.props.navigation.navigate('Locator', { location: assignment.place.location })}
-				/>
-			)
+			return <Assignment key={assignment.id} info={assignment} navigation={this.props.navigation}/>
 		})
 	}
 
