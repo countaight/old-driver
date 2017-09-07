@@ -14,6 +14,7 @@ export default class Assignment extends Component {
 		super(props);
 		this.state = {
 			height: new Animated.Value(0),
+			isOpen: false,
 		}
 	}
 
@@ -35,16 +36,31 @@ export default class Assignment extends Component {
 		}
 	}
 
+	_toggleDesc () {
+		this.setState({ isOpen: !this.state.isOpen });
+	}
+
 	_handlePress () {
-		// this.props.navigation.navigate('Locator', { location: info.place.location })
+		if(this.state.isOpen) {
+			Animated.timing(
+				this.state.height,
+				{
+					toValue: 0,
+					duration: 500,
+				}).start()
+
+			this._toggleDesc();
+			return;
+		}
+
 		Animated.timing(
 			this.state.height,
 			{
 				toValue: 100,
 				duration: 500,
-				easing: Easing.bounce
 			}
 		).start()
+		this._toggleDesc();
 	}
 
 	render () {
@@ -56,13 +72,14 @@ export default class Assignment extends Component {
 				<ListItem
 					key={info.id}
 					leftIcon={{name: 'local-shipping', color: chevronColor}}
-					rightIcon={{name: 'chevron left'}}
-					onPressRightIcon={() => Alert.alert("CLICKED")}
+					rightIcon={{name: 'place'}}
+					onPressRightIcon={() => this.props.navigation.navigate('Locator', { location: info.place.location })}
 					titleStyle={{color: 'white'}}
 					containerStyle={{backgroundColor: color}}
 					chevronColor={chevronColor}
 					underlayColor={chevronColor}
 					title={info.place.name}
+					onPress={this._handlePress.bind(this)}
 				/>
 				<Animated.View style={[this._animatedStyle(), styles.description]}>
 					<Text>{JSON.stringify(info)}</Text>
