@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
 	Dimensions,
+	FlatList,
 	StyleSheet,
 	Text,
 	View,
@@ -31,10 +32,8 @@ class Home extends Component {
 		return false;
 	}
 
-	_renderAssignments () {
-		return this.props.user.assignments.map(assignment => {
-			return <Assignment key={assignment.id} info={assignment} navigation={this.props.navigation}/>
-		})
+	_renderAssignments ({ item }) {
+		return <Assignment key={item.id} info={item} navigation={this.props.navigation} />
 	}
 
 	render () {
@@ -60,7 +59,11 @@ class Home extends Component {
 					</Text>
 				</Card>
 				<List containerStyle={{ width: (width * .90) }}>
-					{this._renderAssignments()}
+					<FlatList
+						data={user.assignments}
+						renderItem={this._renderAssignments.bind(this)}
+						keyExtractor={(item, index) => item.id}
+					/>
 				</List>
 			</View>
 		)
